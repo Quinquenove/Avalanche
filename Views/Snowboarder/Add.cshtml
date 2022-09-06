@@ -1,0 +1,35 @@
+﻿@model SnowboarderViewModel
+@{
+    ViewData["Title"] = "Snowboarder";
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label for="SnowboarderNachname" class="form-label">Nachname</label>
+        <input asp-for="Nachname" class="form-control" id="SnowboarderNachname" aria-describedby="Nachname">
+    </div>
+    <div class="mb-3">
+        <label for="SnowboarderVorname" class="form-label">Vorname</label>
+        <input asp-for="Vorname" class="form-control" id="SnowboarderVorname" aria-describedby="Vorname">
+    </div>
+    <div class="mb-3">
+        <label for="SnowboarderKuenstlername" class="form-label">Künstlername</label>
+        <input asp-for="Kuenstlername" class="form-control" id="SnowboarderKuenstlername" aria-describedby="Kuenstlername">
+    </div>
+    <div class="mb-3">
+        <label for="SnowboarderGeburtstag" class="form-label">Geburtstag</label>
+        <input asp-for="Geburtstag" class="form-control" id="SnowboarderGeburtstag" aria-describedby="Geburtstag">
+    </div>
+    <div class="mb-3">
+        <label for="SnowboarderHausBerg" class="form-label">HausBerg</label>
+        <input asp-for="HausBerg.Name" class="form-control" id="SnowboarderHausBerg" aria-describedby="HausBerg">
+    </div>
+    <div class="mb-3">
+        <label for="SnowboarderNummer" class="form-label">Mitgliedsnummer</label>
+        <input asp-for="Mitgliednummer" class="form-control" id="SnowboarderNummer" aria-describedby="Mitgliedsnummer">
+    </div>
+    <div class="mb-3">
+        <input type="submit" value="Hinzufügen" class="btn btn-primary" asp-controller="Snowboarder" asp-action="Add" />
+        <a asp-controller="Snowboarder" asp-action="Index">Abbrechen</a>
+    </div>
+</form>
