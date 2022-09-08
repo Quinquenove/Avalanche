@@ -22,7 +22,7 @@
     </div>
     <div class="mb-3">
         <label asp-for="HausBerg" class="form-label"></label>
-        <input asp-for="HausBerg.Name" class="form-control" id="SnowboarderHausBerg" aria-describedby="HausBerg">
+        <select asp-for="HausBerg.Name" asp-items="Model.BergList" class="form-select" ></select>
     </div>
     <div class="mb-3">
         <label asp-for="Mitgliednummer" class="form-label"></label>
