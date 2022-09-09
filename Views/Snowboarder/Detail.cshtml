@@ -1,8 +1,52 @@
-﻿@model SnowboarderViewModel
+﻿@model SnowboarderDetailViewModel
 @{
     ViewData["Title"] = "Snowboarder";
 }
 
 <p>This will be the Detail-Page</p>
 
-<p>@Model.Mitgliednummer</p>
+<h5>Stammdaten</h5>
+
+<table class="table table-borderless">
+    <tbody>
+        <tr>
+            <td>Mitgliedsnummer:</td>
+            <td>@Model.snowboarder.Mitgliednummer</td>
+        </tr>
+        <tr>
+            <td>Nachname:</td>
+            <td>@Model.snowboarder.Nachname</td>
+        </tr>
+        <tr>
+            <td>Vorname:</td>
+            <td>@Model.snowboarder.Vorname</td>
+        </tr>
+        <tr>
+            <td>Künstlername:</td>
+            <td>@Model.snowboarder.Kuenstlername</td>
+        </tr>
+        <tr>
+            <td>Geburtstag:</td>
+            <td>@Model.snowboarder.Geburtstag.Value.ToShortDateString()</td>
+        </tr>
+    </tbody>
+</table>
+
+<h5>HausBerg</h5>
+
+<table class="table table-borderless">
+    <tbody>
+        <tr>
+            <td>Name:</td>
+            <td>@Model.berg.Name</td>
+        </tr>
+        <tr>
+            <td>Gebirge:</td>
+            <td>@Model.berg.Gebirge</td>
+        </tr>
+        <tr>
+            <td>Schwierigkeit:</td>
+            <td>@Model.berg.Schwierigkeit</td>
+        </tr>
+    </tbody>
+</table>

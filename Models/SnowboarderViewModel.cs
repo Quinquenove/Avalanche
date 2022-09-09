@@ -13,9 +13,9 @@ namespace Avalanche.Models
         public string Kuenstlername { get; set; }
         [Display(Name = "Geburtstag")]
         [DataType(DataType.Date)]
-        public DateTime Geburtstag { get; set; }
+        public DateTime? Geburtstag { get; set; }
         [Display(Name = "Haus Berg")]
-        public BergViewModel HausBerg { get; set; }
+        public string HausBerg { get; set; }
         [Display(Name = "Mitgliedsnummer")]
         public string Mitgliednummer { get; set; }
         public List<SelectListItem> BergList { get; set; }

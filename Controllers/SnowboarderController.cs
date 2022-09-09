@@ -2,6 +2,7 @@
 using Avalanche.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Avalanche.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Avalanche.Controllers
 {
@@ -18,6 +19,23 @@ namespace Avalanche.Controllers
                 Geburtstag = DateTime.Now,
                 Mitgliednummer = "123-Test"
             });
+
+            using (var Context = new snowboardingContext())
+            {
+                var snowboarders = Context.Snowboarders.ToList();
+
+                foreach(var snowboarder in snowboarders)
+                {
+                    list.Add(new SnowboarderViewModel()
+                    {
+                        Nachname = snowboarder.Nachname,
+                        Vorname = snowboarder.Vorname,
+                        Kuenstlername = snowboarder.Kuenstlername,
+                        Geburtstag = snowboarder.Geburtstag,
+                        Mitgliednummer = snowboarder.Mitgliedsnummer
+                    });
+                }
+            }
             return View(list);
         }
 
@@ -34,20 +52,60 @@ namespace Avalanche.Controllers
                     BergList.Add(new SelectListItem() { Value = item.Name, Text = item.Name });
                 }
             }
-            //ToDo: Daten für Berge holen, damit Dropdown erstellt werden kann
             return View(new SnowboarderViewModel() { BergList = BergList, Geburtstag= DateTime.Now });
         }
 
         [HttpPost]
         public IActionResult Add(SnowboarderViewModel snowboarder)
         {
+            using (var Context = new snowboardingContext())
+            {
+                Snowboarder snowboarderDB = new Snowboarder()
+                {
+                    Nachname = snowboarder.Nachname,
+                    Vorname = snowboarder.Vorname,
+                    Kuenstlername = snowboarder.Kuenstlername,
+                    Geburtstag = snowboarder.Geburtstag,
+                    HausBerg = snowboarder.HausBerg,
+                    Mitgliedsnummer = snowboarder.Mitgliednummer
+                };
+
+                Context.Add(snowboarderDB);
+                Context.SaveChanges();
+            }
             return RedirectToAction(actionName: "Index");
         }
 
         [HttpGet]
         public IActionResult Detail(string snowboarderID)
         {
-            return View();
+            SnowboarderDetailViewModel snowboarderDetail = new SnowboarderDetailViewModel();
+            SnowboarderViewModel snowboarder;
+            BergViewModel berg;
+            using(var Context = new snowboardingContext())
+            {
+                var snowboarderDB = Context.Snowboarders.Include(x => x.HausBergNavigation).First(x => x.Mitgliedsnummer.Equals(snowboarderID));
+                snowboarder = new SnowboarderViewModel()
+                {
+                    Nachname = snowboarderDB.Nachname,
+                    Vorname = snowboarderDB.Vorname,
+                    Kuenstlername = snowboarderDB.Kuenstlername,
+                    Geburtstag = snowboarderDB.Geburtstag,
+                    HausBerg = snowboarderDB.HausBerg,
+                    Mitgliednummer = snowboarderDB.Mitgliedsnummer
+                };
+                berg = new BergViewModel()
+                {
+                    Gebirge = snowboarderDB.HausBergNavigation.Gebirge,
+                    Name = snowboarderDB.HausBergNavigation.Name,
+                    Schwierigkeit = snowboarderDB.HausBergNavigation.Schwierigkeit
+                };
+
+                snowboarderDetail.snowboarder = snowboarder;
+                snowboarderDetail.berg = berg;
+
+            }
+            return View(snowboarderDetail);
         }
     }
 }
