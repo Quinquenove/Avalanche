@@ -3,50 +3,29 @@
     ViewData["Title"] = "Snowboarder";
 }
 
-<p>This will be the Detail-Page</p>
-
-<h5>Stammdaten</h5>
-
-<table class="table table-borderless">
-    <tbody>
-        <tr>
-            <td>Mitgliedsnummer:</td>
-            <td>@Model.snowboarder.Mitgliednummer</td>
-        </tr>
-        <tr>
-            <td>Nachname:</td>
-            <td>@Model.snowboarder.Nachname</td>
-        </tr>
-        <tr>
-            <td>Vorname:</td>
-            <td>@Model.snowboarder.Vorname</td>
-        </tr>
-        <tr>
-            <td>Künstlername:</td>
-            <td>@Model.snowboarder.Kuenstlername</td>
-        </tr>
-        <tr>
-            <td>Geburtstag:</td>
-            <td>@Model.snowboarder.Geburtstag.Value.ToShortDateString()</td>
-        </tr>
-    </tbody>
-</table>
-
-<h5>HausBerg</h5>
-
-<table class="table table-borderless">
-    <tbody>
-        <tr>
-            <td>Name:</td>
-            <td>@Model.berg.Name</td>
-        </tr>
-        <tr>
-            <td>Gebirge:</td>
-            <td>@Model.berg.Gebirge</td>
-        </tr>
-        <tr>
-            <td>Schwierigkeit:</td>
-            <td>@Model.berg.Schwierigkeit</td>
-        </tr>
-    </tbody>
-</table>
+<div class="hstack gap-5">
+    <div class="vstack gap-2">
+        <div><h5>Stammdaten</h5></div>
+        <div>Mitgliedsnummer:</div>
+        <div>Nachname:</div>
+        <div>Vorname:</div>
+        <div>Künstlername:</div>
+        <div>Geburtstag:</div>
+        <div class="mt-1"><h5>HausBerg</h5></div>
+        <div>Name:</div>
+        <div>Gebirge:</div>
+        <div>Schwierigkeit:</div>
+    </div>
+    <div class="vstack gap-2">
+        <div class="mt-auto"></div>
+        <div>@Model.snowboarder.Mitgliednummer</div>
+        <div>@Model.snowboarder.Nachname</div>
+        <div>@Model.snowboarder.Vorname</div>
+        <div>@Model.snowboarder.Kuenstlername</div>
+        <div>@Model.snowboarder.Geburtstag.Value.ToShortDateString()</div>
+        <div class="mt-auto"></div>
+        <div>@Model.berg.Name</div>
+        <div>@Model.berg.Gebirge</div>
+        <div>@Model.berg.Schwierigkeit</div>
+    </div>
+</div>
