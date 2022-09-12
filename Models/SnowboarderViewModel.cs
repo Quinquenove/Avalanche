@@ -17,7 +17,7 @@ namespace Avalanche.Models
         [Display(Name = "Haus Berg")]
         public string HausBerg { get; set; }
         [Display(Name = "Mitgliedsnummer")]
-        public string Mitgliednummer { get; set; }
+        public string Mitgliedsnummer { get; set; }
         public List<SelectListItem> BergList { get; set; }
     }
 }

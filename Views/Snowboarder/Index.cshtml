@@ -17,21 +17,21 @@
             @foreach(var snowboarder in Model)
             {
             <tr>
-                <td>@snowboarder.Mitgliednummer</td>
+                <td>@snowboarder.Mitgliedsnummer</td>
                 <td>@snowboarder.Nachname</td>
                 <td>@snowboarder.Kuenstlername</td>
                 <td>@snowboarder.Vorname</td>
                 <td>
                     <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                        <a asp-controller="Snowboarder" asp-action="Detail" asp-route-snowboarderID=@snowboarder.Mitgliednummer class="btn btn-primary">
+                        <a asp-controller="Snowboarder" asp-action="Detail" asp-route-snowboarderID=@snowboarder.Mitgliedsnummer class="btn btn-primary">
                             <i class="bi bi-list-ul"></i>
                             Details
                         </a>
-                        <a asp-controller="Snowboarder" asp-action="Update" asp-route-snowboarderID=@snowboarder.Mitgliednummer class="btn btn-primary">
+                        <a asp-controller="Snowboarder" asp-action="Update" asp-route-snowboarderID=@snowboarder.Mitgliedsnummer class="btn btn-primary">
                             <i class="bi bi-pencil-square"></i>
                             Bearbeiten
                         </a>
-                        <a asp-controller="Snowboarder" asp-action="Delete" asp-route-snowboarderID=@snowboarder.Mitgliednummer class="btn btn-danger">
+                        <a asp-controller="Snowboarder" asp-action="Delete" asp-route-snowboarderID=@snowboarder.Mitgliedsnummer class="btn btn-danger">
                             <i class="bi bi-trash-fill"></i>
                             Löschen
                         </a>

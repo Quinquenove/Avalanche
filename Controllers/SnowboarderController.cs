@@ -24,7 +24,7 @@ namespace Avalanche.Controllers
                         Vorname = snowboarder.Vorname,
                         Kuenstlername = snowboarder.Kuenstlername,
                         Geburtstag = snowboarder.Geburtstag,
-                        Mitgliednummer = snowboarder.Mitgliedsnummer
+                        Mitgliedsnummer = snowboarder.Mitgliedsnummer
                     });
                 }
             }
@@ -59,7 +59,7 @@ namespace Avalanche.Controllers
                     Kuenstlername = snowboarder.Kuenstlername,
                     Geburtstag = snowboarder.Geburtstag,
                     HausBerg = snowboarder.HausBerg,
-                    Mitgliedsnummer = snowboarder.Mitgliednummer
+                    Mitgliedsnummer = snowboarder.Mitgliedsnummer
                 };
 
                 Context.Add(snowboarderDB);
@@ -84,7 +84,7 @@ namespace Avalanche.Controllers
                     Kuenstlername = snowboarderDB.Kuenstlername,
                     Geburtstag = snowboarderDB.Geburtstag,
                     HausBerg = snowboarderDB.HausBerg,
-                    Mitgliednummer = snowboarderDB.Mitgliedsnummer
+                    Mitgliedsnummer = snowboarderDB.Mitgliedsnummer
                 };
                 berg = new BergViewModel()
                 {
@@ -92,9 +92,16 @@ namespace Avalanche.Controllers
                     Name = snowboarderDB.HausBergNavigation.Name,
                     Schwierigkeit = snowboarderDB.HausBergNavigation.Schwierigkeit
                 };
+                var sponsor = new SponsoringViewModel()
+                {
+                    Snowboarder = snowboarder.Mitgliedsnummer,
+                    Sponsor = "TestSponsor",
+                    Vertragsart = "TestVertrag"
+                };
 
                 snowboarderDetail.Snowboarder = snowboarder;
                 snowboarderDetail.Berg = berg;
+                snowboarderDetail.Sponsoring = new List<SponsoringViewModel>() { sponsor };
 
             }
             return View(snowboarderDetail);
@@ -138,7 +145,7 @@ namespace Avalanche.Controllers
                 Vorname = snowboarderDB.Vorname,
                 Kuenstlername = snowboarderDB.Kuenstlername,
                 Geburtstag = snowboarderDB.Geburtstag,
-                Mitgliednummer = snowboarderDB.Mitgliedsnummer,
+                Mitgliedsnummer = snowboarderDB.Mitgliedsnummer,
                 HausBerg = snowboarderDB.HausBerg,
                 BergList = BergList
             };
@@ -152,7 +159,7 @@ namespace Avalanche.Controllers
             Snowboarder snowboarderDB;
             using (var Context = new snowboardingContext())
             {
-                snowboarderDB = Context.Snowboarders.First(x => x.Mitgliedsnummer.Equals(snowboarder.Mitgliednummer));
+                snowboarderDB = Context.Snowboarders.First(x => x.Mitgliedsnummer.Equals(snowboarder.Mitgliedsnummer));
 
                 snowboarderDB.Nachname = snowboarder.Nachname;
                 snowboarderDB.Vorname = snowboarder.Vorname;
