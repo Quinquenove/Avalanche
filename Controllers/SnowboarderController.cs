@@ -107,5 +107,71 @@ namespace Avalanche.Controllers
             }
             return View(snowboarderDetail);
         }
+
+        public IActionResult Delete(string snowboarderID)
+        {
+            using (var Context = new snowboardingContext())
+            {
+                var snowboarder = Context.Snowboarders.First(x => x.Mitgliedsnummer.Equals(snowboarderID));
+
+                Context.Snowboarders.Remove(snowboarder);
+
+                Context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Update(string snowboarderID)
+        {
+            SnowboarderViewModel snowboarder;
+            Snowboarder snowboarderDB;
+            List<SelectListItem> BergList = new List<SelectListItem>();
+            using (var Context = new snowboardingContext())
+            {
+                snowboarderDB = Context.Snowboarders.Include(x => x.HausBergNavigation).First(x => x.Mitgliedsnummer.Equals(snowboarderID));
+
+                var bergDataList = Context.Bergs.ToList();
+
+                foreach (var item in bergDataList)
+                {
+                    BergList.Add(new SelectListItem() { Value = item.Name, Text = item.Name });
+                }
+            }
+
+            snowboarder = new SnowboarderViewModel()
+            {
+                Nachname = snowboarderDB.Nachname,
+                Vorname = snowboarderDB.Vorname,
+                Kuenstlername = snowboarderDB.Kuenstlername,
+                Geburtstag = snowboarderDB.Geburtstag,
+                Mitgliednummer = snowboarderDB.Mitgliedsnummer,
+                HausBerg = snowboarderDB.HausBerg,
+                BergList = BergList
+            };
+
+            return View(snowboarder);
+        }
+
+        [HttpPost]
+        public IActionResult Update(SnowboarderViewModel snowboarder)
+        {
+            Snowboarder snowboarderDB;
+            using (var Context = new snowboardingContext())
+            {
+                snowboarderDB = Context.Snowboarders.First(x => x.Mitgliedsnummer.Equals(snowboarder.Mitgliednummer));
+
+                snowboarderDB.Nachname = snowboarder.Nachname;
+                snowboarderDB.Vorname = snowboarder.Vorname;
+                snowboarderDB.Kuenstlername = snowboarder.Kuenstlername;
+                snowboarderDB.Geburtstag = snowboarder.Geburtstag;
+                snowboarderDB.HausBerg = snowboarder.HausBerg;
+
+                Context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

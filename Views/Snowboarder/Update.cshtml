@@ -1,0 +1,34 @@
+﻿@model SnowboarderViewModel
+@{
+    ViewData["Title"] = "Snowboarder";
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Nachname" class="form-label" ></label>
+        <input asp-for="Nachname" class="form-control" id="SnowboarderNachname" aria-describedby="Nachname">
+    </div>
+    <div class="mb-3">
+        <label asp-for="Vorname" class="form-label"></label>
+        <input asp-for="Vorname" class="form-control" id="SnowboarderVorname" aria-describedby="Vorname">
+    </div>
+    <div class="mb-3">
+        <label asp-for="Kuenstlername" class="form-label" ></label>
+        <input asp-for="Kuenstlername" class="form-control" id="SnowboarderKuenstlername" value="@Model.Kuenstlername" aria-describedby="Kuenstlername">
+    </div>
+    <div class="mb-3">
+        <label asp-for="Geburtstag" class="form-label"></label>
+        <input asp-for="Geburtstag" class="form-control" id="SnowboarderGeburtstag" aria-describedby="Geburtstag">
+    </div>
+    <div class="mb-3">
+        <label asp-for="HausBerg" class="form-label"></label>
+        <select asp-for="HausBerg" asp-items="Model.BergList" class="form-select" >@Model.HausBerg</select>
+    </div>
+    <div class="mb-3">
+        <input asp-for="Mitgliednummer" class="form-control" id="SnowboarderNummer" type="hidden" aria-describedby="MitgliedsnummerDisabled">
+    </div>
+    <div class="mb-3">
+        <input type="submit" value="Update" class="btn btn-primary" asp-controller="Snowboarder" asp-action="Update" />
+        <a asp-controller="Snowboarder" asp-action="Index">Abbrechen</a>
+    </div>
+</form>
