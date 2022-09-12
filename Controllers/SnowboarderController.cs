@@ -93,8 +93,8 @@ namespace Avalanche.Controllers
                     Schwierigkeit = snowboarderDB.HausBergNavigation.Schwierigkeit
                 };
 
-                snowboarderDetail.snowboarder = snowboarder;
-                snowboarderDetail.berg = berg;
+                snowboarderDetail.Snowboarder = snowboarder;
+                snowboarderDetail.Berg = berg;
 
             }
             return View(snowboarderDetail);

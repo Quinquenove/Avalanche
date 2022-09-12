@@ -2,7 +2,7 @@
 {
     public class SnowboarderDetailViewModel
     {
-        public SnowboarderViewModel snowboarder { get; set; }
-        public BergViewModel berg { get; set; }
+        public SnowboarderViewModel Snowboarder { get; set; }
+        public BergViewModel Berg { get; set; }
     }
 }
