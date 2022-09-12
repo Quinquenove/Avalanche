@@ -11,14 +11,6 @@ namespace Avalanche.Controllers
         public IActionResult Index()
         {
             List<SnowboarderViewModel> list = new List<SnowboarderViewModel>();
-            list.Add(new SnowboarderViewModel()
-            {
-                Nachname = "Mustermann",
-                Vorname = "Max",
-                Kuenstlername = "Test",
-                Geburtstag = DateTime.Now,
-                Mitgliednummer = "123-Test"
-            });
 
             using (var Context = new snowboardingContext())
             {
@@ -42,7 +34,7 @@ namespace Avalanche.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            List<SelectListItem> BergList = new List<SelectListItem>() { new SelectListItem() { Value = "TestBerg", Text = "TestBerg" } };
+            List<SelectListItem> BergList = new List<SelectListItem>();
             using (var Context = new snowboardingContext())
             {
                 var bergDataList = Context.Bergs.ToList();
