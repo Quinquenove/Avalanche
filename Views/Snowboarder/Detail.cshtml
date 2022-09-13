@@ -1,0 +1,56 @@
+﻿@model SnowboarderDetailViewModel
+@{
+    ViewData["Title"] = "Snowboarder";
+}
+
+<div class="hstack gap-5">
+    <div class="vstack gap-2">
+        <div><h5>Stammdaten</h5></div>
+        <div>Mitgliedsnummer:</div>
+        <div>Nachname:</div>
+        <div>Vorname:</div>
+        <div>Künstlername:</div>
+        <div>Geburtstag:</div>
+        <div class="mt-1"><h5>HausBerg</h5></div>
+        <div>Name:</div>
+        <div>Gebirge:</div>
+        <div>Schwierigkeit:</div>
+    </div>
+    <div class="vstack gap-2">
+        <div class="mt-auto"></div>
+        <div>@Model.Snowboarder.Mitgliedsnummer</div>
+        <div>@Model.Snowboarder.Nachname</div>
+        <div>@Model.Snowboarder.Vorname</div>
+        <div>@Model.Snowboarder.Kuenstlername</div>
+        <div>@Model.Snowboarder.Geburtstag.Value.ToShortDateString()</div>
+        <div class="mt-auto"></div>
+        <div>@Model.Berg.Name</div>
+        <div>@Model.Berg.Gebirge</div>
+        <div>@Model.Berg.Schwierigkeit</div>
+    </div>
+</div>
+@if (Model.Sponsoring != null)
+{
+    <div class="mt-3"><h5>Sponsoren</h5></div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Sponsorname
+                </th>
+                <th>
+                    Vertragsart
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var sponsor in Model.Sponsoring)
+            {
+                <tr>
+                    <td>@sponsor.Sponsor</td>
+                    <td>@sponsor.Vertragsart</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

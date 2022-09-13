@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Avalanche.Models
 {
@@ -11,10 +12,12 @@ namespace Avalanche.Models
         [Display(Name = "Künstlername")]
         public string Kuenstlername { get; set; }
         [Display(Name = "Geburtstag")]
-        public DateTime Geburtstag { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? Geburtstag { get; set; }
         [Display(Name = "Haus Berg")]
-        public BergViewModel HausBerg { get; set; }
+        public string HausBerg { get; set; }
         [Display(Name = "Mitgliedsnummer")]
-        public string Mitgliednummer { get; set; }
+        public string Mitgliedsnummer { get; set; }
+        public List<SelectListItem> BergList { get; set; }
     }
 }
