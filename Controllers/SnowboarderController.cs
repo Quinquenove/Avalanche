@@ -76,7 +76,9 @@ namespace Avalanche.Controllers
             BergViewModel berg;
             using(var Context = new snowboardingContext())
             {
-                var snowboarderDB = Context.Snowboarders.Include(x => x.HausBergNavigation).First(x => x.Mitgliedsnummer.Equals(snowboarderID));
+                var snowboarderDB = Context.Snowboarders
+                                    .Include(x => x.HausBergNavigation)
+                                    .First(x => x.Mitgliedsnummer.Equals(snowboarderID));
                 snowboarder = new SnowboarderViewModel()
                 {
                     Nachname = snowboarderDB.Nachname,

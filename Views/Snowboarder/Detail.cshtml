@@ -29,6 +29,17 @@
         <div>@Model.Berg.Schwierigkeit</div>
     </div>
 </div>
+<div class="mt-3"><h5>Profi-Information</h5></div>
+<hr />
+@if (Model.Profi != null)
+{
+
+}
+else
+{
+    <div class="mt-3"><p>Dieser Snowboarder ist kein Profi.</p></div>
+    <a asp-controller="Profi" asp-action="Add" class="btn btn-primary btn-sm">Hinzufügen</a>
+}
 @if (Model.Sponsoring != null)
 {
     <div class="mt-3"><h5>Sponsoren</h5></div>
