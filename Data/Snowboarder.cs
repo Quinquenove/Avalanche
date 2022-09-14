@@ -8,6 +8,7 @@ namespace Avalanche.Data
         public Snowboarder()
         {
             Profis = new HashSet<Profi>();
+            Wettkampfs = new HashSet<Wettkampf>();
         }
 
         public string Mitgliedsnummer { get; set; } = null!;
@@ -19,5 +20,7 @@ namespace Avalanche.Data
 
         public virtual Berg? HausBergNavigation { get; set; }
         public virtual ICollection<Profi> Profis { get; set; }
+
+        public virtual ICollection<Wettkampf> Wettkampfs { get; set; }
     }
 }

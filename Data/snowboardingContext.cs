@@ -156,6 +156,23 @@ namespace Avalanche.Data
                     .WithMany(p => p.Snowboarders)
                     .HasForeignKey(d => d.HausBerg)
                     .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasMany(d => d.Wettkampfs)
+                    .WithMany(p => p.Snowboarders)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "Wettkaempfer",
+                        l => l.HasOne<Wettkampf>().WithMany().HasForeignKey("WettkampfId"),
+                        r => r.HasOne<Snowboarder>().WithMany().HasForeignKey("Snowboarder"),
+                        j =>
+                        {
+                            j.HasKey("Snowboarder", "WettkampfId");
+
+                            j.ToTable("wettkaempfer");
+
+                            j.IndexerProperty<string>("Snowboarder").HasColumnType("varchar").HasColumnName("snowboarder");
+
+                            j.IndexerProperty<long>("WettkampfId").HasColumnType("integer").HasColumnName("wettkampf_id");
+                        });
             });
 
             modelBuilder.Entity<Sponsor>(entity =>
@@ -221,21 +238,25 @@ namespace Avalanche.Data
 
             modelBuilder.Entity<Wettkampf>(entity =>
             {
-                entity.HasKey(e => new { e.Name, e.Jahr });
+                entity.HasKey(e => e.Rowid);
 
                 entity.ToTable("wettkampf");
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.Rowid)
+                    .ValueGeneratedNever()
+                    .HasColumnName("rowid");
+
+                entity.Property(e => e.Berg)
                     .HasColumnType("varchar")
-                    .HasColumnName("name");
+                    .HasColumnName("berg");
 
                 entity.Property(e => e.Jahr)
                     .HasColumnType("year")
                     .HasColumnName("jahr");
 
-                entity.Property(e => e.Berg)
+                entity.Property(e => e.Name)
                     .HasColumnType("varchar")
-                    .HasColumnName("berg");
+                    .HasColumnName("name");
 
                 entity.Property(e => e.Preisgeld)
                     .HasColumnType("double")
