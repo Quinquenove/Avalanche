@@ -25,7 +25,7 @@ namespace Avalanche.Data
         public virtual DbSet<Sponsoring> Sponsorings { get; set; } = null!;
         public virtual DbSet<Trick> Tricks { get; set; } = null!;
         public virtual DbSet<Vertragsart> Vertragsarts { get; set; } = null!;
-        public virtual DbSet<Wettkampf> Wettkampfs { get; set; } = null!;
+        public virtual DbSet<Wettkampf> Wettkaempfe { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

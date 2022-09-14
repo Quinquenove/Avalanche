@@ -10,8 +10,6 @@ namespace Avalanche.Data
         public string? Sponsor { get; set; }
         public string? Berg { get; set; }
         public double? Preisgeld { get; set; }
-
-        public virtual Berg? BergNavigation { get; set; }
-        public virtual Sponsor? SponsorNavigation { get; set; }
+        public int WettkampfId { get; set; }
     }
 }

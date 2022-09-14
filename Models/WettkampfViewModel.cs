@@ -5,6 +5,6 @@
         public string Name { get; set; } = null!;
         public byte[] Jahr { get; set; } = null!;
         public string? Berg { get; set; }
-        public int? Teilnehmer { get; set; }
+        public int WettkampfId { get; set; }
     }
 }
