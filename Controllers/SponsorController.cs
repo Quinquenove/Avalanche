@@ -10,6 +10,12 @@ namespace Avalanche.Controllers
         }
 
         [HttpGet]
+        public IActionResult AddSponsor()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult AddSponsoring()
         {
             return View();
