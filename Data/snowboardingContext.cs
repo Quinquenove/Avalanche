@@ -84,6 +84,9 @@ namespace Avalanche.Data
 
                 entity.ToTable("profi");
 
+                entity.HasIndex(e => e.Mitgliedsnummer, "IX_profi_mitgliedsnummer")
+                    .IsUnique();
+
                 entity.Property(e => e.Lizenznummer)
                     .HasColumnType("text")
                     .HasColumnName("lizenznummer");
@@ -100,15 +103,10 @@ namespace Avalanche.Data
                     .HasColumnType("integer")
                     .HasColumnName("weltcuppunkte");
 
-                entity.HasOne(d => d.BestTrickNavigation)
-                    .WithMany(p => p.Profis)
-                    .HasForeignKey(d => d.BestTrick)
-                    .OnDelete(DeleteBehavior.SetNull);
-
                 entity.HasOne(d => d.MitgliedsnummerNavigation)
-                    .WithMany(p => p.Profis)
-                    .HasForeignKey(d => d.Mitgliedsnummer)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .WithOne(p => p.Profi)
+                    .HasForeignKey<Profi>(d => d.Mitgliedsnummer)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Schwierigkeit>(entity =>
@@ -156,6 +154,12 @@ namespace Avalanche.Data
                     .WithMany(p => p.Snowboarders)
                     .HasForeignKey(d => d.HausBerg)
                     .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(d => d.MitgliedsnummerNavigation)
+                    .WithOne(p => p.Snowboarder)
+                    .HasPrincipalKey<Profi>(p => p.Mitgliedsnummer)
+                    .HasForeignKey<Snowboarder>(d => d.Mitgliedsnummer)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(d => d.Wettkampfs)
                     .WithMany(p => p.Snowboarders)
