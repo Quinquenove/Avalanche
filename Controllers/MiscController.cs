@@ -2,7 +2,7 @@
 
 namespace Avalanche.Controllers
 {
-    public class SponsorController : Controller
+    public class MiscController : Controller
     {
         public IActionResult Index()
         {
