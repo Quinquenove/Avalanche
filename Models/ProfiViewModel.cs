@@ -1,10 +1,16 @@
-﻿namespace Avalanche.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Avalanche.Models
 {
     public class ProfiViewModel
     {
+        [Display(Name = "Lizenznummer")]
         public string Lizenznummer { get; set; }
-        public long Weltcuppunkte { get; set; }
+        [Display(Name = "Weltcuppunkte")]
+        public long? Weltcuppunkte { get; set; }
+        [Display(Name = "Mitgliedsnummer")]
         public string Mitgliedsnummer { get; set; }
+        [Display(Name = "Best Trick")]
         public string BestTrick { get; set; }
     }
 }

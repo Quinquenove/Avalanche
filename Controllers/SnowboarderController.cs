@@ -78,6 +78,7 @@ namespace Avalanche.Controllers
             {
                 var snowboarderDB = Context.Snowboarders
                                     .Include(x => x.HausBergNavigation)
+                                    .Include(x => x.MitgliedsnummerNavigation)
                                     .First(x => x.Mitgliedsnummer.Equals(snowboarderID));
                 snowboarder = new SnowboarderViewModel()
                 {
@@ -100,6 +101,16 @@ namespace Avalanche.Controllers
                     Sponsor = "TestSponsor",
                     Vertragsart = "TestVertrag"
                 };
+                if(snowboarderDB.Profi != null)
+                {
+                    snowboarderDetail.Profi = new ProfiViewModel()
+                    {
+                        Lizenznummer = snowboarderDB.Profi.Lizenznummer,
+                        Weltcuppunkte = snowboarderDB.Profi.Weltcuppunkte,
+                        Mitgliedsnummer = snowboarderDB.Mitgliedsnummer,
+                        BestTrick = snowboarderDB.Profi.BestTrick
+                    };
+                }
 
                 snowboarderDetail.Snowboarder = snowboarder;
                 snowboarderDetail.Berg = berg;
@@ -173,6 +184,31 @@ namespace Avalanche.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult AddProfi(string snowboarderID)
+        {
+            return View(new ProfiViewModel() { Mitgliedsnummer = snowboarderID});
+        }
+
+        [HttpPost]
+        public IActionResult AddProfi(ProfiViewModel profi)
+        {
+            using(var Context = new snowboardingContext())
+            {
+                Profi profiDB = new Profi()
+                {
+                    Lizenznummer = profi.Lizenznummer,
+                    Weltcuppunkte = profi.Weltcuppunkte,
+                    Mitgliedsnummer = profi.Mitgliedsnummer,
+                    BestTrick = profi.BestTrick
+                };
+
+                Context.Add(profiDB);
+                Context.SaveChanges();
+            }
+            return RedirectToAction("Detail", new { snowboarderID = profi.Mitgliedsnummer });
         }
     }
 }

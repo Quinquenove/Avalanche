@@ -1,0 +1,24 @@
+﻿@model ProfiViewModel
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Lizenznummer" class="form-label"></label>
+        <input asp-for="Lizenznummer" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Weltcuppunkte" class="form-label"></label>
+        <input asp-for="Weltcuppunkte" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Mitgliedsnummer" class="form-label"></label>
+        <input asp-for="Mitgliedsnummer" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="BestTrick" class="form-label"></label>
+        <input asp-for="BestTrick" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <input type="submit" value="Hinzufügen" class="btn btn-primary" asp-controller="Snowboarder" asp-action="AddProfi" />
+        <a asp-controller="Snowboarder" asp-action="Index">Abbrechen</a>
+    </div>
+</form>
