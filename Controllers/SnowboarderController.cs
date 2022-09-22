@@ -78,7 +78,7 @@ namespace Avalanche.Controllers
             {
                 var snowboarderDB = Context.Snowboarders
                                     .Include(x => x.HausBergNavigation)
-                                    .Include(x => x.MitgliedsnummerNavigation)
+                                    .Include(x => x.Profi)
                                     .First(x => x.Mitgliedsnummer.Equals(snowboarderID));
                 snowboarder = new SnowboarderViewModel()
                 {

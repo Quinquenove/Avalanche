@@ -4,12 +4,8 @@
 }
 
 <div class="row p-2">
-    <div class="col">
-        <div><h5>Stammdaten</h5></div>
-    </div>
-    <div class="col">
-
-    </div>
+    <div class="mt-3"><h5>Stammdaten</h5></div>
+    <hr />
 </div>
 <div class="row p-2">
     <div class="col">
@@ -62,11 +58,8 @@
     </div>
 </div>
 <div class="row p-2">
-    <div class="col">
-        <div><h5>HausBerg</h5></div>
-    </div>
-    <div class="col">
-    </div>
+    <div class="mt-3"><h5>Hausberg</h5></div>
+    <hr />
 </div>
 <div class="row p-2">
     <div class="col">
@@ -99,13 +92,42 @@
 
 @if (Model.Profi != null)
 {
-
+    <div class="row p-2">
+        <div class="col">
+            <div>Lizenznummer:</div>
+        </div>
+        <div class="col">
+            <div>@Model.Profi.Lizenznummer</div>
+        </div>
+    </div>
+    <div class="row p-2">
+        <div class="col">
+            <div>Weltcuppunkte:</div>
+        </div>
+        <div class="col">
+            <div>@Model.Profi.Weltcuppunkte</div>
+        </div>
+    </div>
+    <div class="row p-2">
+        <div class="col">
+            <div>Best Trick:</div>
+        </div>
+        <div class="col">
+            <div>@Model.Profi.BestTrick</div>
+        </div>
+    </div>
+    <div class="row p-2">
+        <div class="col">
+            <a asp-controller="Snowboarder" asp-action="EditProfi" asp-route-profiID="@Model.Profi.Lizenznummer" class="btn btn-primary btn-sm">Bearbeiten</a>
+        </div>
+        <div class="col"></div>
+    </div>
 }
 else
 {
     <div class="mt-3"><p>Dieser Snowboarder ist kein Profi.</p></div>
+    <a asp-controller="Snowboarder" asp-action="AddProfi" asp-route-snowboarderID="@Model.Snowboarder.Mitgliedsnummer" class="btn btn-primary btn-sm">Hinzufügen</a>
 }
-<a asp-controller="Snowboarder" asp-action="AddProfi" asp-route-snowboarderID="@Model.Snowboarder.Mitgliedsnummer" class="btn btn-primary btn-sm">Hinzufügen</a>
 <div class="row">
     <div class="mt-3"><h5>Sponsoren</h5></div>
     <hr />
