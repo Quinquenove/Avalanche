@@ -1,6 +1,6 @@
 ﻿@model SnowboarderDetailViewModel
 @{
-    ViewData["Title"] = "Snowboarder";
+    ViewData["Title"] = "Detail";
 }
 
 <div class="row p-2">
@@ -118,7 +118,7 @@
     </div>
     <div class="row p-2">
         <div class="col">
-            <a asp-controller="Snowboarder" asp-action="EditProfi" asp-route-profiID="@Model.Profi.Lizenznummer" class="btn btn-primary btn-sm">Bearbeiten</a>
+            <a asp-controller="Snowboarder" asp-action="UpdateProfi" asp-route-profiID="@Model.Profi.Lizenznummer" class="btn btn-primary btn-sm">Bearbeiten</a>
         </div>
         <div class="col"></div>
     </div>

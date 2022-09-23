@@ -210,5 +210,41 @@ namespace Avalanche.Controllers
             }
             return RedirectToAction("Detail", new { snowboarderID = profi.Mitgliedsnummer });
         }
+
+        [HttpGet]
+        public IActionResult UpdateProfi(string profiID)
+        {
+            ProfiViewModel profi;
+            using(var context = new snowboardingContext())
+            {
+                var profiDB = context.Profis.First(x => x.Lizenznummer.Equals(profiID));
+
+                profi = new ProfiViewModel()
+                {
+                    Lizenznummer = profiDB.Lizenznummer,
+                    Weltcuppunkte = profiDB.Weltcuppunkte,
+                    Mitgliedsnummer = profiDB.Mitgliedsnummer,
+                    BestTrick = profiDB.BestTrick
+                };
+            }
+
+            return View(profi);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateProfi(ProfiViewModel profi)
+        {
+            using(var context = new snowboardingContext())
+            {
+                var profiDB = context.Profis.First(x => x.Lizenznummer.Equals(profi.Lizenznummer));
+
+                profiDB.Weltcuppunkte = profi.Weltcuppunkte;
+                profiDB.BestTrick = profi.BestTrick;
+
+                context.SaveChanges();
+            }
+
+            return RedirectToAction("Detail", new { snowboarderID = profi.Mitgliedsnummer });
+        }
     }
 }

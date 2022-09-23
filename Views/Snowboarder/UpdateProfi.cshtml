@@ -5,23 +5,25 @@
 
 <form method="post">
     <div class="mb-3">
+        <input asp-for="Lizenznummer" class="form-control" hidden/>
         <label asp-for="Lizenznummer" class="form-label"></label>
-        <input asp-for="Lizenznummer" class="form-control" />
+        <input type="text" class="form-control" value="@Model.Lizenznummer" disabled/>
     </div>
     <div class="mb-3">
         <label asp-for="Weltcuppunkte" class="form-label"></label>
         <input asp-for="Weltcuppunkte" class="form-control" />
     </div>
     <div class="mb-3">
+        <input asp-for="Mitgliedsnummer" class="form-control" hidden/>
         <label asp-for="Mitgliedsnummer" class="form-label"></label>
-        <input asp-for="Mitgliedsnummer" class="form-control" />
+        <input type="text" class="form-control" value="@Model.Mitgliedsnummer" disabled/>
     </div>
     <div class="mb-3">
         <label asp-for="BestTrick" class="form-label"></label>
         <input asp-for="BestTrick" class="form-control" />
     </div>
     <div class="mb-3">
-        <input type="submit" value="Hinzufügen" class="btn btn-primary" asp-controller="Snowboarder" asp-action="AddProfi" />
+        <input type="submit" value="Update" class="btn btn-primary" asp-controller="Snowboarder" asp-action="UpdateProfi" />
         <a href="javascript:history.go(-1)">Abbrechen</a>
     </div>
 </form>
