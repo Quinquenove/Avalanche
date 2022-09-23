@@ -159,4 +159,4 @@ else
 else{
     <div class="mt-3"><p>Dieser Snowboarder hat kein Sponsoring.</p></div>
 }
-<a asp-controller="Sponsor" asp-action="Add" class="btn btn-primary btn-sm">Hinzufügen</a>
+<a asp-controller="Misc" asp-action="AddSponsoring" asp-route-snowboarderID="@Model.Snowboarder.Mitgliedsnummer" class="btn btn-primary btn-sm">Hinzufügen</a>

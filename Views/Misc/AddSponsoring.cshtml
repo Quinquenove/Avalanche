@@ -1,0 +1,25 @@
+﻿@model SponsoringViewModel
+@{
+    ViewData["Title"] = "Sponsoring";
+}
+
+<form method="post">
+    
+    <div class="mb-3">
+        <input asp-for="Mitgliedsnummer" class="form-control" hidden/>
+        <label asp-for="Mitgliedsnummer" class="form-label"></label>
+        <input type="text" class="form-control" value="@Model.Mitgliedsnummer" disabled/>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Sponsor" class="form-label"></label>
+        <select asp-for="Sponsor" asp-items="Model.SponsorList" class="form-select"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Vertragsart" class="form-label"></label>
+        <input asp-for="Vertragsart" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <input type="submit" value="Hinzufügen" class="btn btn-primary" asp-controller="Misc" asp-action="AddSponsoring" />
+        <a href="javascript:history.go(-1)">Abbrechen</a>
+    </div>
+</form>

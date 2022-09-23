@@ -97,7 +97,7 @@ namespace Avalanche.Controllers
                 };
                 var sponsor = new SponsoringViewModel()
                 {
-                    Snowboarder = snowboarder.Mitgliedsnummer,
+                    Mitgliedsnummer = snowboarder.Mitgliedsnummer,
                     Sponsor = "TestSponsor",
                     Vertragsart = "TestVertrag"
                 };

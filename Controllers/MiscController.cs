@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Avalanche.Data;
+using Avalanche.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Avalanche.Controllers
 {
@@ -9,16 +12,86 @@ namespace Avalanche.Controllers
             return View();
         }
 
+        public IActionResult Sponsor()
+        {
+            List<SponsorViewModel> sponsors = new List<SponsorViewModel>();
+
+            using(var Context = new snowboardingContext())
+            {
+                var sponsorsDB = Context.Sponsors.ToList();
+
+                foreach(var sponsor in sponsorsDB)
+                {
+                    sponsors.Add(new SponsorViewModel() { Name = sponsor.Name });
+                }
+            }
+
+            return View(sponsors);
+        }
+
         [HttpGet]
         public IActionResult AddSponsor()
         {
             return View();
         }
 
-        [HttpGet]
-        public IActionResult AddSponsoring()
+        [HttpPost]
+        public IActionResult AddSponsor(SponsorViewModel sponsor)
         {
-            return View();
+            using (var Context = new snowboardingContext())
+            {
+                Sponsor sponsorDB = new Sponsor()
+                {
+                    Name = sponsor.Name
+                };
+
+                Context.Add(sponsorDB);
+                Context.SaveChanges();
+            }
+
+            return RedirectToAction("Sponsor");
+        }
+
+        [HttpGet]
+        public IActionResult AddSponsoring(string snowboarderID)
+        {
+            SponsoringViewModel sponsoring;
+            List<SelectListItem> sponsorList = new List<SelectListItem>();
+            using (var Context = new snowboardingContext())
+            {
+                var sponsors = Context.Sponsors.ToList();
+
+                foreach(var sponsor in sponsors)
+                {
+                    sponsorList.Add(new SelectListItem() { Text = sponsor.Name, Value = sponsor.Name });
+                }
+
+                sponsoring = new SponsoringViewModel()
+                {
+                    Mitgliedsnummer = snowboarderID,
+                    SponsorList = sponsorList
+                };
+            }
+            return View(sponsoring);
+        }
+
+        [HttpPost]
+        public IActionResult AddSponsoring(SponsoringViewModel sponsoring)
+        {
+            using(var Context = new snowboardingContext())
+            {
+                var sponsoringDB = new Sponsoring()
+                {
+                    Snowboarder = sponsoring.Mitgliedsnummer,
+                    Sponsor = sponsoring.Sponsor,
+                    Vertragsart = sponsoring.Vertragsart
+                };
+
+                Context.Add(sponsoringDB);
+                Context.SaveChanges();
+            }
+
+            return RedirectToAction("Detail", "Snowboarder", new { snowboarderID = sponsoring.Mitgliedsnummer });
         }
     }
 }
