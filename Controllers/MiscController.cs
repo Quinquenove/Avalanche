@@ -93,5 +93,24 @@ namespace Avalanche.Controllers
 
             return RedirectToAction("Detail", "Snowboarder", new { snowboarderID = sponsoring.Mitgliedsnummer });
         }
+
+        public IActionResult VertragsArt()
+        {
+            List<VertragsartViewModel> vertragsartList = new List<VertragsartViewModel>();
+            using(var Context = new snowboardingContext())
+            {
+                var vertragsartDB = Context.Vertragsarts.ToList();
+
+                foreach(var vertragsart in vertragsartDB)
+                {
+                    vertragsartList.Add(new VertragsartViewModel()
+                    {
+                        Name = vertragsart.Name
+                    });
+                }
+            }
+
+            return View(vertragsartList);
+        }
     }
 }
