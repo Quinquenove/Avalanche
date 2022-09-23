@@ -208,10 +208,18 @@ namespace Avalanche.Data
                     .HasColumnType("text")
                     .HasColumnName("vertragsart");
 
+                entity.HasOne(d => d.SnowboarderNavigation)
+                    .WithMany(p => p.Sponsorings)
+                    .HasForeignKey(d => d.Snowboarder);
+
+                entity.HasOne(d => d.SponsorNavigation)
+                    .WithMany(p => p.Sponsorings)
+                    .HasForeignKey(d => d.Sponsor);
+
                 entity.HasOne(d => d.VertragsartNavigation)
                     .WithMany(p => p.Sponsorings)
                     .HasForeignKey(d => d.Vertragsart)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Trick>(entity =>

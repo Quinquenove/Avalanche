@@ -74,11 +74,13 @@ namespace Avalanche.Controllers
             SnowboarderDetailViewModel snowboarderDetail = new SnowboarderDetailViewModel();
             SnowboarderViewModel snowboarder;
             BergViewModel berg;
-            using(var Context = new snowboardingContext())
+            List<SponsoringViewModel> sponsoringList = new List<SponsoringViewModel>();
+            using (var Context = new snowboardingContext())
             {
                 var snowboarderDB = Context.Snowboarders
                                     .Include(x => x.HausBergNavigation)
                                     .Include(x => x.Profi)
+                                    .Include(x => x.Sponsorings)
                                     .First(x => x.Mitgliedsnummer.Equals(snowboarderID));
                 snowboarder = new SnowboarderViewModel()
                 {
@@ -95,12 +97,15 @@ namespace Avalanche.Controllers
                     Name = snowboarderDB.HausBergNavigation.Name,
                     Schwierigkeit = snowboarderDB.HausBergNavigation.Schwierigkeit
                 };
-                var sponsor = new SponsoringViewModel()
+                foreach(var sponsor in snowboarderDB.Sponsorings)
                 {
-                    Mitgliedsnummer = snowboarder.Mitgliedsnummer,
-                    Sponsor = "TestSponsor",
-                    Vertragsart = "TestVertrag"
-                };
+                    sponsoringList.Add(new SponsoringViewModel()
+                    {
+                        Mitgliedsnummer = sponsor.Snowboarder,
+                        Sponsor = sponsor.Sponsor,
+                        Vertragsart = sponsor.Vertragsart
+                    });
+                }
                 if(snowboarderDB.Profi != null)
                 {
                     snowboarderDetail.Profi = new ProfiViewModel()
@@ -114,7 +119,7 @@ namespace Avalanche.Controllers
 
                 snowboarderDetail.Snowboarder = snowboarder;
                 snowboarderDetail.Berg = berg;
-                snowboarderDetail.Sponsoring = new List<SponsoringViewModel>() { sponsor };
+                snowboarderDetail.Sponsoring = sponsoringList;
 
             }
             return View(snowboarderDetail);

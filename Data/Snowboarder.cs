@@ -7,6 +7,7 @@ namespace Avalanche.Data
     {
         public Snowboarder()
         {
+            Sponsorings = new HashSet<Sponsoring>();
             Wettkampfs = new HashSet<Wettkampf>();
         }
 
@@ -18,8 +19,9 @@ namespace Avalanche.Data
         public string? HausBerg { get; set; }
 
         public virtual Berg? HausBergNavigation { get; set; }
-        public virtual Profi? MitgliedsnummerNavigation { get; set; }
-        public virtual Profi? Profi { get; set; }
+        public virtual Profi MitgliedsnummerNavigation { get; set; } = null!;
+        public virtual Profi Profi { get; set; } = null!;
+        public virtual ICollection<Sponsoring> Sponsorings { get; set; }
 
         public virtual ICollection<Wettkampf> Wettkampfs { get; set; }
     }

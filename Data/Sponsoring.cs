@@ -9,6 +9,8 @@ namespace Avalanche.Data
         public string Sponsor { get; set; } = null!;
         public string? Vertragsart { get; set; }
 
+        public virtual Snowboarder SnowboarderNavigation { get; set; } = null!;
+        public virtual Sponsor SponsorNavigation { get; set; } = null!;
         public virtual Vertragsart? VertragsartNavigation { get; set; }
     }
 }
