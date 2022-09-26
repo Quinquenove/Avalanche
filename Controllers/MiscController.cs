@@ -52,24 +52,45 @@ namespace Avalanche.Controllers
             return RedirectToAction("Sponsor");
         }
 
+        public IActionResult DeleteSponsor(string sponsor)
+        {
+            using (var Context = new snowboardingContext())
+            {
+                var sponsorDB = Context.Sponsors.First(x => x.Name.Equals(sponsor));
+
+                Context.Remove(sponsorDB);
+                Context.SaveChanges();
+            }
+
+            return RedirectToAction("Sponsor");
+        }
+
         [HttpGet]
         public IActionResult AddSponsoring(string snowboarderID)
         {
             SponsoringViewModel sponsoring;
             List<SelectListItem> sponsorList = new List<SelectListItem>();
+            List<SelectListItem> vertragsartList = new List<SelectListItem>();
             using (var Context = new snowboardingContext())
             {
                 var sponsors = Context.Sponsors.ToList();
+                var vertragsarten = Context.Vertragsarts.ToList();
 
                 foreach(var sponsor in sponsors)
                 {
                     sponsorList.Add(new SelectListItem() { Text = sponsor.Name, Value = sponsor.Name });
                 }
 
+                foreach(var vertragsart in vertragsarten)
+                {
+                    vertragsartList.Add(new SelectListItem() { Text = vertragsart.Name, Value = vertragsart.Name });
+                }
+
                 sponsoring = new SponsoringViewModel()
                 {
                     Mitgliedsnummer = snowboarderID,
-                    SponsorList = sponsorList
+                    SponsorList = sponsorList,
+                    VertragsartList = vertragsartList
                 };
             }
             return View(sponsoring);
@@ -111,6 +132,29 @@ namespace Avalanche.Controllers
             }
 
             return View(vertragsartList);
+        }
+
+        [HttpGet]
+        public IActionResult AddVertragsArt()
+        {
+            return View(new VertragsartViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult AddVertragsArt(VertragsartViewModel vertragsart)
+        {
+            using (var Context = new snowboardingContext())
+            {
+                var vertragsartDB = new Vertragsart()
+                {
+                    Name = vertragsart.Name
+                };
+
+                Context.Add(vertragsartDB);
+                Context.SaveChanges();
+            }
+
+                return RedirectToAction("VertragsArt");
         }
     }
 }

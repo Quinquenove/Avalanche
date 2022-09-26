@@ -16,7 +16,7 @@
     </div>
     <div class="mb-3">
         <label asp-for="Vertragsart" class="form-label"></label>
-        <input asp-for="Vertragsart" class="form-control" />
+        <select asp-for="Vertragsart" asp-items="Model.VertragsartList" class="form-select"></select>
     </div>
     <div class="mb-3">
         <input type="submit" value="Hinzufügen" class="btn btn-primary" asp-controller="Misc" asp-action="AddSponsoring" />
