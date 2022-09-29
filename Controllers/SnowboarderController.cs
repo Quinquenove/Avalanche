@@ -3,31 +3,32 @@ using Avalanche.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Avalanche.Data;
 using Microsoft.EntityFrameworkCore;
+using Avalanche.Repositories;
 
 namespace Avalanche.Controllers
 {
     public class SnowboarderController : Controller
     {
+        private UnitOfWork unitOfWork = new UnitOfWork(new snowboardingContext());
+
         public IActionResult Index()
         {
             List<SnowboarderViewModel> list = new List<SnowboarderViewModel>();
 
-            using (var Context = new snowboardingContext())
-            {
-                var snowboarders = Context.Snowboarders.ToList();
+            var snowboarders = unitOfWork.Snowboarder.GetAll();
 
-                foreach(var snowboarder in snowboarders)
+            foreach (var snowboarder in snowboarders)
+            {
+                list.Add(new SnowboarderViewModel()
                 {
-                    list.Add(new SnowboarderViewModel()
-                    {
-                        Nachname = snowboarder.Nachname,
-                        Vorname = snowboarder.Vorname,
-                        Kuenstlername = snowboarder.Kuenstlername,
-                        Geburtstag = snowboarder.Geburtstag,
-                        Mitgliedsnummer = snowboarder.Mitgliedsnummer
-                    });
-                }
+                    Nachname = snowboarder.Nachname,
+                    Vorname = snowboarder.Vorname,
+                    Kuenstlername = snowboarder.Kuenstlername,
+                    Geburtstag = snowboarder.Geburtstag,
+                    Mitgliedsnummer = snowboarder.Mitgliedsnummer
+                });
             }
+
             return View(list);
         }
 
@@ -35,36 +36,34 @@ namespace Avalanche.Controllers
         public IActionResult Add()
         {
             List<SelectListItem> BergList = new List<SelectListItem>();
-            using (var Context = new snowboardingContext())
-            {
-                var bergDataList = Context.Bergs.ToList();
 
-                foreach (var item in bergDataList)
-                {
-                    BergList.Add(new SelectListItem() { Value = item.Name, Text = item.Name });
-                }
+            var bergDataList = unitOfWork.Berg.GetAll();
+
+            foreach (var item in bergDataList)
+            {
+                BergList.Add(new SelectListItem() { Value = item.Name, Text = item.Name });
             }
+
             return View(new SnowboarderViewModel() { BergList = BergList, Geburtstag= DateTime.Now });
         }
 
         [HttpPost]
         public IActionResult Add(SnowboarderViewModel snowboarder)
         {
-            using (var Context = new snowboardingContext())
-            {
-                Snowboarder snowboarderDB = new Snowboarder()
-                {
-                    Nachname = snowboarder.Nachname,
-                    Vorname = snowboarder.Vorname,
-                    Kuenstlername = snowboarder.Kuenstlername,
-                    Geburtstag = snowboarder.Geburtstag,
-                    HausBerg = snowboarder.HausBerg,
-                    Mitgliedsnummer = snowboarder.Mitgliedsnummer
-                };
 
-                Context.Add(snowboarderDB);
-                Context.SaveChanges();
-            }
+            Snowboarder snowboarderDB = new Snowboarder()
+            {
+                Nachname = snowboarder.Nachname,
+                Vorname = snowboarder.Vorname,
+                Kuenstlername = snowboarder.Kuenstlername,
+                Geburtstag = snowboarder.Geburtstag,
+                HausBerg = snowboarder.HausBerg,
+                Mitgliedsnummer = snowboarder.Mitgliedsnummer
+            };
+
+            unitOfWork.Snowboarder.Add(snowboarderDB);
+            unitOfWork.Complete();
+
             return RedirectToAction(actionName: "Index");
         }
 

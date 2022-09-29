@@ -19,8 +19,8 @@ namespace Avalanche.Data
         public string? HausBerg { get; set; }
 
         public virtual Berg? HausBergNavigation { get; set; }
-        public virtual Profi MitgliedsnummerNavigation { get; set; } = null!;
-        public virtual Profi Profi { get; set; } = null!;
+        public virtual Profi? MitgliedsnummerNavigation { get; set; }
+        public virtual Profi? Profi { get; set; }
         public virtual ICollection<Sponsoring> Sponsorings { get; set; }
 
         public virtual ICollection<Wettkampf> Wettkampfs { get; set; }

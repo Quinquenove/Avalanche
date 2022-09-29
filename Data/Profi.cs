@@ -10,7 +10,7 @@ namespace Avalanche.Data
         public string Mitgliedsnummer { get; set; } = null!;
         public string? BestTrick { get; set; }
 
-        public virtual Snowboarder MitgliedsnummerNavigation { get; set; } = null!;
-        public virtual Snowboarder Snowboarder { get; set; } = null!;
+        public virtual Snowboarder? MitgliedsnummerNavigation { get; set; }
+        public virtual Snowboarder? Snowboarder { get; set; }
     }
 }
