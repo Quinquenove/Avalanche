@@ -42,17 +42,9 @@ namespace Avalanche.Data
             {
                 entity.ToTable("Berg");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("INT")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.GebirgeId).HasColumnName("Gebirge_Id");
 
-                entity.Property(e => e.GebirgeId)
-                    .HasColumnType("INT")
-                    .HasColumnName("Gebirge_Id");
-
-                entity.Property(e => e.SchwierigkeitId)
-                    .HasColumnType("INT")
-                    .HasColumnName("Schwierigkeit_Id");
+                entity.Property(e => e.SchwierigkeitId).HasColumnName("Schwierigkeit_Id");
 
                 entity.HasOne(d => d.Gebirge)
                     .WithMany(p => p.Bergs)
@@ -68,10 +60,6 @@ namespace Avalanche.Data
             {
                 entity.ToTable("Gebirge");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("INT")
-                    .ValueGeneratedNever();
-
                 entity.Property(e => e.Name).HasColumnType("Text");
             });
 
@@ -86,13 +74,9 @@ namespace Avalanche.Data
 
                 entity.Property(e => e.Lizenznummer).HasColumnType("Text");
 
-                entity.Property(e => e.BestTrickId)
-                    .HasColumnType("INT")
-                    .HasColumnName("Best_Trick_Id");
+                entity.Property(e => e.BestTrickId).HasColumnName("Best_Trick_Id");
 
                 entity.Property(e => e.Mitgliedsnummer).HasColumnType("Text");
-
-                entity.Property(e => e.Weltcuppunkte).HasColumnType("INT");
 
                 entity.HasOne(d => d.BestTrick)
                     .WithMany(p => p.Profis)
@@ -108,10 +92,6 @@ namespace Avalanche.Data
             {
                 entity.ToTable("Schwierigkeit");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("INT")
-                    .ValueGeneratedNever();
-
                 entity.Property(e => e.Name).HasColumnType("Text");
             });
 
@@ -123,9 +103,7 @@ namespace Avalanche.Data
 
                 entity.Property(e => e.Geburtstag).HasColumnType("Date");
 
-                entity.Property(e => e.HausBergId)
-                    .HasColumnType("INT")
-                    .HasColumnName("Haus_Berg_Id");
+                entity.Property(e => e.HausBergId).HasColumnName("Haus_Berg_Id");
 
                 entity.Property(e => e.Kuenstlername).HasColumnType("Text");
 
@@ -150,17 +128,13 @@ namespace Avalanche.Data
 
                             j.ToTable("Wettkaempfer");
 
-                            j.IndexerProperty<long>("WettkampfId").HasColumnType("INT").HasColumnName("Wettkampf_Id");
+                            j.IndexerProperty<long>("WettkampfId").HasColumnName("Wettkampf_Id");
                         });
             });
 
             modelBuilder.Entity<Sponsor>(entity =>
             {
                 entity.ToTable("Sponsor");
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("INT")
-                    .ValueGeneratedNever();
 
                 entity.Property(e => e.Name).HasColumnType("Text");
             });
@@ -172,10 +146,6 @@ namespace Avalanche.Data
                 entity.ToTable("Sponsoring");
 
                 entity.Property(e => e.Snowboarder).HasColumnType("Text");
-
-                entity.Property(e => e.Sponsor).HasColumnType("INT");
-
-                entity.Property(e => e.Vertragsart).HasColumnType("INT");
 
                 entity.HasOne(d => d.SnowboarderNavigation)
                     .WithMany(p => p.Sponsorings)
@@ -195,20 +165,14 @@ namespace Avalanche.Data
             {
                 entity.ToTable("Trick");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("INT")
-                    .ValueGeneratedNever();
-
                 entity.Property(e => e.Name).HasColumnType("Text");
+
+                entity.Property(e => e.Beschreibung).HasColumnType("Text");
             });
 
             modelBuilder.Entity<Vertragsart>(entity =>
             {
                 entity.ToTable("Vertragsart");
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("INT")
-                    .ValueGeneratedNever();
 
                 entity.Property(e => e.Name).HasColumnType("Text");
             });
@@ -217,21 +181,11 @@ namespace Avalanche.Data
             {
                 entity.ToTable("Wettkampf");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("INT")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.BergId)
-                    .HasColumnType("INT")
-                    .HasColumnName("Berg_Id");
-
-                entity.Property(e => e.Jahr).HasColumnType("INT");
+                entity.Property(e => e.BergId).HasColumnName("Berg_Id");
 
                 entity.Property(e => e.Name).HasColumnType("Text");
 
-                entity.Property(e => e.SponsorId)
-                    .HasColumnType("INT")
-                    .HasColumnName("Sponsor_Id");
+                entity.Property(e => e.SponsorId).HasColumnName("Sponsor_Id");
 
                 entity.HasOne(d => d.Berg)
                     .WithMany(p => p.Wettkampfs)

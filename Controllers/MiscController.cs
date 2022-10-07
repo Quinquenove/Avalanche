@@ -67,7 +67,7 @@ namespace Avalanche.Controllers
             List<SelectListItem> vertragsartList = new List<SelectListItem>();
 
             var sponsorDB = unitOfWork.Sponsor.GetAll();
-            var vertragsartDB = unitOfWork.Sponsor.GetAll();
+            var vertragsartDB = unitOfWork.Vertragsart.GetAll();
 
             foreach (var sponsor in sponsorDB)
             {
@@ -165,9 +165,10 @@ namespace Avalanche.Controllers
             {
                 bergList.Add(new BergViewModel()
                 {
+                    Id = berg.Id,
                     Name = berg.Name,
-                    Gebirge = berg.Gebirge.Name,
-                    Schwierigkeit = berg.Schwierigkeit.Name
+                    GebirgeId = berg.Gebirge.Name,
+                    SchwierigkeitId = berg.Schwierigkeit.Name
                 });
             }
 
@@ -192,7 +193,7 @@ namespace Avalanche.Controllers
                 SchwierigkeitListe.Add(new SelectListItem() { Text = Schwierigkeit.Name, Value = Schwierigkeit.Id.ToString() });
             }
 
-            return View(new BergViewModel());
+            return View(new BergViewModel() { GebirgeListe = GebirgeListe, SchwierigkeitListe = SchwierigkeitListe});
         }
 
         [HttpPost]
@@ -201,8 +202,8 @@ namespace Avalanche.Controllers
             var bergDB = new Berg()
             {
                 Name = berg.Name,
-                GebirgeId = long.Parse(berg.Gebirge),
-                SchwierigkeitId = long.Parse(berg.Schwierigkeit)
+                GebirgeId = long.Parse(berg.GebirgeId),
+                SchwierigkeitId = long.Parse(berg.SchwierigkeitId)
             };
 
             unitOfWork.Berg.Add(bergDB);
@@ -211,7 +212,42 @@ namespace Avalanche.Controllers
             return RedirectToAction("Berg");
         }
 
-        public IActionResult DeleteBerg(int berg)
+        [HttpGet]
+        public IActionResult UpdateBerg(long berg)
+        {
+            var bergDB = unitOfWork.Berg.GetById(berg);
+
+            var GebirgeListeDB = unitOfWork.Gebirge.GetAll();
+            var SchwierigkeitListeDB = unitOfWork.Schwierigkeit.GetAll();
+
+            BergViewModel bergViewModel = new BergViewModel()
+            {
+                Id = bergDB.Id,
+                Name = bergDB.Name,
+                GebirgeId = bergDB.GebirgeId.ToString(),
+                SchwierigkeitId = bergDB.SchwierigkeitId.ToString(),
+                GebirgeListe = GebirgeListeDB.Select(x => new SelectListItem{ Text = x.Name, Value = x.Id.ToString()}),
+                SchwierigkeitListe = SchwierigkeitListeDB.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
+            };
+
+            return View(bergViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateBerg(BergViewModel berg)
+        {
+            var bergDB = unitOfWork.Berg.GetById(berg.Id.Value);
+
+            bergDB.Name = berg.Name;
+            bergDB.GebirgeId = long.Parse(berg.GebirgeId);
+            bergDB.SchwierigkeitId = long.Parse(berg.SchwierigkeitId);
+
+            unitOfWork.Complete();
+
+            return RedirectToAction("Berg");
+        }
+
+            public IActionResult DeleteBerg(long berg)
         {
             var bergDB = unitOfWork.Berg.GetById(berg);
 
@@ -229,7 +265,7 @@ namespace Avalanche.Controllers
 
             foreach(var gebirge in gebirgeDB)
             {
-                gebirgeList.Add(new GebirgeViewModel() { Name = gebirge.Name });
+                gebirgeList.Add(new GebirgeViewModel() { Id = gebirge.Id, Name = gebirge.Name });
             }
 
             return View(gebirgeList);
@@ -252,7 +288,7 @@ namespace Avalanche.Controllers
             return RedirectToAction("Gebirge");
         }
 
-        public IActionResult DeleteGebirge(int gebirge)
+        public IActionResult DeleteGebirge(long gebirge)
         {
             var gebirgeDB = unitOfWork.Gebirge.GetById(gebirge);
 
@@ -346,6 +382,27 @@ namespace Avalanche.Controllers
             var trickDB = unitOfWork.Trick.GetById(trick);
 
             unitOfWork.Trick.Remove(trickDB);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Trick");
+        }
+
+        [HttpGet]
+        public IActionResult UpdateTrick(long trick)
+        {
+            var trickDB = unitOfWork.Trick.GetById(trick);
+
+            return View(new TrickViewModel() { Id = trickDB.Id, Name = trickDB.Name, Beschreibung = trickDB.Beschreibung});
+        }
+
+        [HttpPost]
+        public IActionResult UpdateTrick(TrickViewModel trick)
+        {
+            Trick trickDB = unitOfWork.Trick.GetById(trick.Id.Value);
+
+            trickDB.Name = trick.Name;
+            trickDB.Beschreibung = trick.Beschreibung;
+
             unitOfWork.Complete();
 
             return RedirectToAction("Trick");

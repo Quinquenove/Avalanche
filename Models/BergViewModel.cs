@@ -1,14 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Avalanche.Models
 {
     public class BergViewModel
     {
+        public long? Id { get; set; }
+        [Display(Name = "Name")]
         public string Name { get; set; }
-        public string Gebirge { get; set; }
-        public string Schwierigkeit { get; set; }
+        [Display(Name = "Gebirge")]
+        public string GebirgeId { get; set; }
+        [Display(Name = "Schwierigkeit")]
+        public string SchwierigkeitId { get; set; }
 
-        public List<SelectListItem> GebirgeListe { get; set; }
-        public List<SelectListItem> SchwierigkeitListe { get; set; }
+        public IEnumerable<SelectListItem> GebirgeListe { get; set; }
+        public IEnumerable<SelectListItem> SchwierigkeitListe { get; set; }
     }
 }

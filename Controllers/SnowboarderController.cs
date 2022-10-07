@@ -41,7 +41,7 @@ namespace Avalanche.Controllers
 
             foreach (var item in bergDataList)
             {
-                BergList.Add(new SelectListItem() { Value = item.Name, Text = item.Id.ToString() });
+                BergList.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
             }
 
             return View(new SnowboarderViewModel() { BergList = BergList, Geburtstag= DateTime.Now });
@@ -50,14 +50,13 @@ namespace Avalanche.Controllers
         [HttpPost]
         public IActionResult Add(SnowboarderViewModel snowboarder)
         {
-
             Snowboarder snowboarderDB = new Snowboarder()
             {
                 Nachname = snowboarder.Nachname,
                 Vorname = snowboarder.Vorname,
                 Kuenstlername = snowboarder.Kuenstlername,
                 Geburtstag = snowboarder.Geburtstag,
-                HausBergId = long.Parse(snowboarder.HausBerg),
+                HausBergId = long.Parse(snowboarder.HausBergId),
                 Mitgliedsnummer = snowboarder.Mitgliedsnummer
             };
 
@@ -71,55 +70,51 @@ namespace Avalanche.Controllers
         public IActionResult Detail(string snowboarderID)
         {
             SnowboarderDetailViewModel snowboarderDetail = new SnowboarderDetailViewModel();
-            SnowboarderViewModel snowboarder;
-            BergViewModel berg;
             List<SponsoringViewModel> sponsoringList = new List<SponsoringViewModel>();
-            using (var Context = new snowboardingContext())
+
+            var snowboarderDB = unitOfWork.Snowboarder.Find(x => x.Mitgliedsnummer.Equals(snowboarderID)).First();
+
+            SnowboarderViewModel snowboarder = new SnowboarderViewModel()
             {
-                var snowboarderDB = Context.Snowboarders
-                                    .Include(x => x.Profi)
-                                    .Include(x => x.Sponsorings)
-                                    .First(x => x.Mitgliedsnummer.Equals(snowboarderID));
-                snowboarder = new SnowboarderViewModel()
-                {
-                    Nachname = snowboarderDB.Nachname,
-                    Vorname = snowboarderDB.Vorname,
-                    Kuenstlername = snowboarderDB.Kuenstlername,
-                    Geburtstag = snowboarderDB.Geburtstag,
-                    HausBerg = snowboarderDB.HausBerg.Name,
-                    Mitgliedsnummer = snowboarderDB.Mitgliedsnummer
-                };
-                berg = new BergViewModel()
-                {
-                    Gebirge = snowboarderDB.HausBerg.Gebirge.Name,
-                    Name = snowboarderDB.HausBerg.Name,
-                    Schwierigkeit = snowboarderDB.HausBerg.Schwierigkeit.Name
-                };
-                foreach(var sponsor in snowboarderDB.Sponsorings)
-                {
-                    sponsoringList.Add(new SponsoringViewModel()
-                    {
-                        Mitgliedsnummer = sponsor.Snowboarder,
-                        Sponsor = sponsor.SponsorNavigation.Name,
-                        Vertragsart = sponsor.VertragsartNavigation.Name
-                    });
-                }
-                if(snowboarderDB.Profi != null)
-                {
-                    snowboarderDetail.Profi = new ProfiViewModel()
-                    {
-                        Lizenznummer = snowboarderDB.Profi.Lizenznummer,
-                        Weltcuppunkte = snowboarderDB.Profi.Weltcuppunkte,
-                        Mitgliedsnummer = snowboarderDB.Mitgliedsnummer,
-                        BestTrick = snowboarderDB.Profi.BestTrick.Name
-                    };
-                }
+                Nachname = snowboarderDB.Nachname,
+                Vorname = snowboarderDB.Vorname,
+                Kuenstlername = snowboarderDB.Kuenstlername,
+                Geburtstag = snowboarderDB.Geburtstag,
+                HausBergId = snowboarderDB.HausBerg.Name,
+                Mitgliedsnummer = snowboarderDB.Mitgliedsnummer
+            };
 
-                snowboarderDetail.Snowboarder = snowboarder;
-                snowboarderDetail.Berg = berg;
-                snowboarderDetail.Sponsoring = sponsoringList;
+            BergViewModel berg = new BergViewModel()
+            {
+                GebirgeId = snowboarderDB.HausBerg.Gebirge.Name,
+                Name = snowboarderDB.HausBerg.Name,
+                SchwierigkeitId = snowboarderDB.HausBerg.Schwierigkeit.Name
+            };
 
+            foreach (var sponsor in snowboarderDB.Sponsorings)
+            {
+                sponsoringList.Add(new SponsoringViewModel()
+                {
+                    Mitgliedsnummer = sponsor.Snowboarder,
+                    Sponsor = sponsor.SponsorNavigation.Name,
+                    Vertragsart = sponsor.VertragsartNavigation.Name
+                });
             }
+            if (snowboarderDB.Profi != null)
+            {
+                snowboarderDetail.Profi = new ProfiViewModel()
+                {
+                    Lizenznummer = snowboarderDB.Profi.Lizenznummer,
+                    Weltcuppunkte = snowboarderDB.Profi.Weltcuppunkte,
+                    Mitgliedsnummer = snowboarderDB.Mitgliedsnummer,
+                    BestTrick = snowboarderDB.Profi.BestTrick.Name
+                };
+            }
+
+            snowboarderDetail.Snowboarder = snowboarder;
+            snowboarderDetail.Berg = berg;
+            snowboarderDetail.Sponsoring = sponsoringList;
+
             return View(snowboarderDetail);
         }
 
@@ -145,7 +140,7 @@ namespace Avalanche.Controllers
 
             foreach (var item in bergDataList)
             {
-                BergList.Add(new SelectListItem() { Value = item.Name, Text = item.Id.ToString() });
+                BergList.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
             }
 
             snowboarder = new SnowboarderViewModel()
@@ -155,7 +150,7 @@ namespace Avalanche.Controllers
                 Kuenstlername = snowboarderDB.Kuenstlername,
                 Geburtstag = snowboarderDB.Geburtstag,
                 Mitgliedsnummer = snowboarderDB.Mitgliedsnummer,
-                HausBerg = snowboarderDB.HausBerg.Id.ToString(),
+                HausBergId = snowboarderDB.HausBerg.Id.ToString(),
                 BergList = BergList
             };
 
@@ -174,7 +169,7 @@ namespace Avalanche.Controllers
                 snowboarderDB.Vorname = snowboarder.Vorname;
                 snowboarderDB.Kuenstlername = snowboarder.Kuenstlername;
                 snowboarderDB.Geburtstag = snowboarder.Geburtstag;
-                snowboarderDB.HausBergId = long.Parse(snowboarder.HausBerg);
+                snowboarderDB.HausBergId = long.Parse(snowboarder.HausBergId);
 
                 Context.SaveChanges();
             }
@@ -233,7 +228,7 @@ namespace Avalanche.Controllers
                 Lizenznummer = profiDB.Lizenznummer,
                 Weltcuppunkte = profiDB.Weltcuppunkte,
                 Mitgliedsnummer = profiDB.Mitgliedsnummer,
-                BestTrick = profiDB.BestTrick.Name,
+                BestTrick = profiDB.BestTrick.ToString(),
                 TrickList = TrickList
             };
 

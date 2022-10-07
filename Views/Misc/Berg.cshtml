@@ -1,0 +1,38 @@
+﻿@model List<BergViewModel>
+@{
+    ViewData["Title"] = "Berg";
+}
+
+<a class="btn btn-primary" asp-controller="Misc" asp-action="AddBerg">Hinzufügen</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Gebirge</th>
+            <th>Schwierigkeit</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Berg in Model)
+        {
+            <tr>
+                <td>@Berg.Name</td>
+                <td>@Berg.GebirgeId</td>
+                <td>@Berg.SchwierigkeitId</td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                        <a asp-controller="Misc" asp-action="UpdateBerg" asp-route-berg=@Berg.Id class="btn btn-primary">
+                            <i class="bi bi-pencil-square"></i>
+                            Bearbeiten
+                        </a>
+                        <a asp-controller="Misc" asp-action="DeleteBerg" asp-route-berg=@Berg.Id class="btn btn-danger">
+                            <i class="bi bi-trash-fill"></i>
+                            Löschen
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

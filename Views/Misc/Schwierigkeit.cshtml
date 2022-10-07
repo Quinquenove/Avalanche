@@ -1,9 +1,9 @@
-﻿@model List<VertragsartViewModel>
+﻿@model List<SchwierigkeitViewModel>
 @{
-    ViewData["Title"] = "Vertragsart";
+    ViewData["Title"] = "Schwierigkeit";
 }
 
-<a class="btn btn-primary" asp-controller="Misc" asp-action="AddVertragsart">Hinzufügen</a>
+<a class="btn btn-primary" asp-controller="Misc" asp-action="AddSchwierigkeit">Hinzufügen</a>
 <table class="table">
     <thead>
         <tr>
@@ -12,13 +12,13 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var vertragsArt in Model)
+        @foreach (var Schwierigkeit in Model)
         {
             <tr>
-                <td>@vertragsArt.Name</td>
+                <td>@Schwierigkeit.Name</td>
                 <td>
                     <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                        <a asp-controller="Snowboarder" asp-action="DeleteVertragsart" asp-route-sponsor=@vertragsArt.Name class="btn btn-danger">
+                        <a asp-controller="Misc" asp-action="DeleteVertragsart" asp-route-schwierigkeit=@Schwierigkeit.Id class="btn btn-danger">
                             <i class="bi bi-trash-fill"></i>
                             Löschen
                         </a>

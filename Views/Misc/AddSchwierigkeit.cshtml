@@ -1,0 +1,15 @@
+﻿@model SchwierigkeitViewModel
+@{
+    ViewData["Title"] = "Schwierigkeit";
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <input type="submit" value="Hinzufügen" class="btn btn-primary" asp-controller="Misc" asp-action="AddSchwierigkeit" />
+        <a href="javascript:history.go(-1)">Abbrechen</a>
+    </div>
+</form>

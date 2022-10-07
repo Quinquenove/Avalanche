@@ -1,0 +1,36 @@
+﻿@model List<TrickViewModel>
+@{
+    ViewData["Title"] = "Trick";
+}
+
+<a class="btn btn-primary" asp-controller="Misc" asp-action="AddTrick">Hinzufügen</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Trick in Model)
+        {
+            <tr>
+                <td>@Trick.Name</td>
+                <td>@Trick.Beschreibung</td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                        <a asp-controller="Misc" asp-action="UpdateTrick" asp-route-trick=@Trick.Id class="btn btn-primary">
+                            <i class="bi bi-pencil-square"></i>
+                            Bearbeiten
+                        </a>
+                        <a asp-controller="Misc" asp-action="DeleteTrick" asp-route-trick=@Trick.Id class="btn btn-danger">
+                            <i class="bi bi-trash-fill"></i>
+                            Löschen
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

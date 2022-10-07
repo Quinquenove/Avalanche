@@ -15,7 +15,7 @@ namespace Avalanche.Models
         [DataType(DataType.Date)]
         public DateTime? Geburtstag { get; set; }
         [Display(Name = "Haus Berg")]
-        public string HausBerg { get; set; }
+        public string HausBergId { get; set; }
         [Display(Name = "Mitgliedsnummer")]
         public string Mitgliedsnummer { get; set; }
         public List<SelectListItem> BergList { get; set; }

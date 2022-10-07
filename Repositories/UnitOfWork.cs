@@ -5,8 +5,8 @@ namespace Avalanche.Repositories
     public class UnitOfWork : IDisposable
     {
         private readonly snowboardingContext _context;
-        public Repository<Snowboarder> Snowboarder { get; }
-        public Repository<Berg> Berg { get; }
+        public SnowboarderRepository Snowboarder { get; }
+        public BergRepository Berg { get; }
         public Repository<Gebirge> Gebirge { get; }
         public Repository<Schwierigkeit> Schwierigkeit { get; }
         public Repository<Profi> Profi { get; }
@@ -19,8 +19,8 @@ namespace Avalanche.Repositories
         public UnitOfWork(snowboardingContext context)
         {
             _context = context;
-            Snowboarder = new Repository<Snowboarder>(_context);
-            Berg = new Repository<Berg>(_context);
+            Snowboarder = new SnowboarderRepository(_context);
+            Berg = new BergRepository(_context);
             Gebirge = new Repository<Gebirge>(_context);
             Schwierigkeit = new Repository<Schwierigkeit>(_context);
             Profi = new Repository<Profi>(_context);

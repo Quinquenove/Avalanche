@@ -6,7 +6,7 @@ namespace Avalanche.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly DbSet<T> _entities;
+        protected readonly DbSet<T> _entities;
 
         public Repository(DbContext Context)
         {
@@ -22,12 +22,12 @@ namespace Avalanche.Repositories
             _entities.AddRange(entities);
         }
 
-        public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
+        public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
             return _entities.Where(predicate);
         }
 
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return _entities.ToList();
         }

@@ -20,7 +20,7 @@
     </div>
     <div class="mb-3">
         <label asp-for="BestTrick" class="form-label"></label>
-        <input asp-for="BestTrick" class="form-control" />
+        <select asp-for="BestTrick" asp-items="Model.TrickList" class="form-select"></select>
     </div>
     <div class="mb-3">
         <input type="submit" value="Update" class="btn btn-primary" asp-controller="Snowboarder" asp-action="UpdateProfi" />
