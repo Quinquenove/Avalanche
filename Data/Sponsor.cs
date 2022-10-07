@@ -11,6 +11,7 @@ namespace Avalanche.Data
             Wettkampfs = new HashSet<Wettkampf>();
         }
 
+        public long Id { get; set; }
         public string Name { get; set; } = null!;
 
         public virtual ICollection<Sponsoring> Sponsorings { get; set; }

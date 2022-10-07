@@ -10,15 +10,15 @@ namespace Avalanche.Data
             Snowboarders = new HashSet<Snowboarder>();
         }
 
-        public long Rowid { get; set; }
-        public string? Name { get; set; }
-        public byte[]? Jahr { get; set; }
-        public string? Sponsor { get; set; }
-        public string? Berg { get; set; }
+        public long Id { get; set; }
+        public string Name { get; set; } = null!;
+        public long Jahr { get; set; }
+        public long? SponsorId { get; set; }
+        public long? BergId { get; set; }
         public double? Preisgeld { get; set; }
 
-        public virtual Berg? BergNavigation { get; set; }
-        public virtual Sponsor? SponsorNavigation { get; set; }
+        public virtual Berg? Berg { get; set; }
+        public virtual Sponsor? Sponsor { get; set; }
 
         public virtual ICollection<Snowboarder> Snowboarders { get; set; }
     }

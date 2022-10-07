@@ -4,7 +4,7 @@ namespace Avalanche.Repositories
 {
     public interface IRepository<T> where T :class
     {
-        T GetById(int id);
+        T GetById(long id);
 
         IEnumerable<T> GetAll();
 

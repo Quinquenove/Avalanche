@@ -10,6 +10,7 @@ namespace Avalanche.Data
             Sponsorings = new HashSet<Sponsoring>();
         }
 
+        public long Id { get; set; }
         public string Name { get; set; } = null!;
 
         public virtual ICollection<Sponsoring> Sponsorings { get; set; }

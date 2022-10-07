@@ -8,9 +8,9 @@ namespace Avalanche.Data
         public string Lizenznummer { get; set; } = null!;
         public long? Weltcuppunkte { get; set; }
         public string Mitgliedsnummer { get; set; } = null!;
-        public string? BestTrick { get; set; }
+        public long? BestTrickId { get; set; }
 
-        public virtual Snowboarder? MitgliedsnummerNavigation { get; set; }
-        public virtual Snowboarder? Snowboarder { get; set; }
+        public virtual Trick? BestTrick { get; set; }
+        public virtual Snowboarder MitgliedsnummerNavigation { get; set; } = null!;
     }
 }

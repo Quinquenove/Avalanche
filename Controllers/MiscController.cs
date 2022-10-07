@@ -1,5 +1,6 @@
 ﻿using Avalanche.Data;
 using Avalanche.Models;
+using Avalanche.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -7,6 +8,8 @@ namespace Avalanche.Controllers
 {
     public class MiscController : Controller
     {
+        private UnitOfWork unitOfWork = new UnitOfWork(new snowboardingContext());
+
         public IActionResult Index()
         {
             return View();
@@ -16,14 +19,11 @@ namespace Avalanche.Controllers
         {
             List<SponsorViewModel> sponsors = new List<SponsorViewModel>();
 
-            using(var Context = new snowboardingContext())
-            {
-                var sponsorsDB = Context.Sponsors.ToList();
+            var sponsorsDB = unitOfWork.Sponsor.GetAll();
 
-                foreach(var sponsor in sponsorsDB)
-                {
-                    sponsors.Add(new SponsorViewModel() { Name = sponsor.Name });
-                }
+            foreach (var sponsor in sponsorsDB)
+            {
+                sponsors.Add(new SponsorViewModel() { Id = sponsor.Id ,Name = sponsor.Name });
             }
 
             return View(sponsors);
@@ -32,35 +32,29 @@ namespace Avalanche.Controllers
         [HttpGet]
         public IActionResult AddSponsor()
         {
-            return View();
+            return View(new SponsorViewModel());
         }
 
         [HttpPost]
         public IActionResult AddSponsor(SponsorViewModel sponsor)
         {
-            using (var Context = new snowboardingContext())
+            Sponsor sponsorDB = new Sponsor()
             {
-                Sponsor sponsorDB = new Sponsor()
-                {
-                    Name = sponsor.Name
-                };
+                Name = sponsor.Name
+            };
 
-                Context.Add(sponsorDB);
-                Context.SaveChanges();
-            }
+            unitOfWork.Sponsor.Add(sponsorDB);
+            unitOfWork.Complete();
 
             return RedirectToAction("Sponsor");
         }
 
-        public IActionResult DeleteSponsor(string sponsor)
+        public IActionResult DeleteSponsor(long sponsor)
         {
-            using (var Context = new snowboardingContext())
-            {
-                var sponsorDB = Context.Sponsors.First(x => x.Name.Equals(sponsor));
+            var sponsorDB = unitOfWork.Sponsor.GetById(sponsor);
 
-                Context.Remove(sponsorDB);
-                Context.SaveChanges();
-            }
+            unitOfWork.Sponsor.Remove(sponsorDB);
+            unitOfWork.Complete();
 
             return RedirectToAction("Sponsor");
         }
@@ -71,77 +65,71 @@ namespace Avalanche.Controllers
             SponsoringViewModel sponsoring;
             List<SelectListItem> sponsorList = new List<SelectListItem>();
             List<SelectListItem> vertragsartList = new List<SelectListItem>();
-            using (var Context = new snowboardingContext())
+
+            var sponsorDB = unitOfWork.Sponsor.GetAll();
+            var vertragsartDB = unitOfWork.Sponsor.GetAll();
+
+            foreach (var sponsor in sponsorDB)
             {
-                var sponsors = Context.Sponsors.ToList();
-                var vertragsarten = Context.Vertragsarts.ToList();
-
-                foreach(var sponsor in sponsors)
-                {
-                    sponsorList.Add(new SelectListItem() { Text = sponsor.Name, Value = sponsor.Name });
-                }
-
-                foreach(var vertragsart in vertragsarten)
-                {
-                    vertragsartList.Add(new SelectListItem() { Text = vertragsart.Name, Value = vertragsart.Name });
-                }
-
-                sponsoring = new SponsoringViewModel()
-                {
-                    Mitgliedsnummer = snowboarderID,
-                    SponsorList = sponsorList,
-                    VertragsartList = vertragsartList
-                };
+                sponsorList.Add(new SelectListItem() { Text = sponsor.Name, Value = sponsor.Id.ToString() });
             }
+
+            foreach (var vertragsart in vertragsartDB)
+            {
+                vertragsartList.Add(new SelectListItem() { Text = vertragsart.Name, Value = vertragsart.Id.ToString() });
+            }
+
+            sponsoring = new SponsoringViewModel()
+            {
+                Mitgliedsnummer = snowboarderID,
+                SponsorList = sponsorList,
+                VertragsartList = vertragsartList
+            };
+
             return View(sponsoring);
         }
 
         [HttpPost]
         public IActionResult AddSponsoring(SponsoringViewModel sponsoring)
         {
-            using(var Context = new snowboardingContext())
+            var sponsoringDB = new Sponsoring()
             {
-                var sponsoringDB = new Sponsoring()
-                {
-                    Snowboarder = sponsoring.Mitgliedsnummer,
-                    Sponsor = sponsoring.Sponsor,
-                    Vertragsart = sponsoring.Vertragsart
-                };
+                Snowboarder = sponsoring.Mitgliedsnummer,
+                Sponsor = long.Parse(sponsoring.Sponsor),
+                Vertragsart = long.Parse(sponsoring.Vertragsart)
+            };
 
-                Context.Add(sponsoringDB);
-                Context.SaveChanges();
-            }
+            unitOfWork.Sponsoring.Add(sponsoringDB);
+            unitOfWork.Complete();
 
             return RedirectToAction("Detail", "Snowboarder", new { snowboarderID = sponsoring.Mitgliedsnummer });
         }
 
-        public IActionResult VertragsArt()
+        public IActionResult Vertragsart()
         {
             List<VertragsartViewModel> vertragsartList = new List<VertragsartViewModel>();
-            using(var Context = new snowboardingContext())
-            {
-                var vertragsartDB = Context.Vertragsarts.ToList();
+            var vertragsartDB = unitOfWork.Vertragsart.GetAll();
 
-                foreach(var vertragsart in vertragsartDB)
+            foreach (var vertragsart in vertragsartDB)
+            {
+                vertragsartList.Add(new VertragsartViewModel()
                 {
-                    vertragsartList.Add(new VertragsartViewModel()
-                    {
-                        Name = vertragsart.Name
-                    });
-                }
+                    Id = vertragsart.Id,
+                    Name = vertragsart.Name
+                });
             }
 
             return View(vertragsartList);
         }
 
         [HttpGet]
-        public IActionResult AddVertragsArt()
+        public IActionResult AddVertragsart()
         {
             return View(new VertragsartViewModel());
         }
 
         [HttpPost]
-        public IActionResult AddVertragsArt(VertragsartViewModel vertragsart)
+        public IActionResult AddVertragsart(VertragsartViewModel vertragsart)
         {
             using (var Context = new snowboardingContext())
             {
@@ -154,7 +142,213 @@ namespace Avalanche.Controllers
                 Context.SaveChanges();
             }
 
-                return RedirectToAction("VertragsArt");
+                return RedirectToAction("Vertragsart");
+        }
+
+        public IActionResult DeleteVertragsart(long vertragsart)
+        {
+            var vertragsartDB = unitOfWork.Vertragsart.GetById(vertragsart);
+
+            unitOfWork.Vertragsart.Remove(vertragsartDB);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Vertragsart");
+        }
+
+        public IActionResult Berg()
+        {
+            List<BergViewModel> bergList = new List<BergViewModel>();
+
+            var bergDB = unitOfWork.Berg.GetAll();
+
+            foreach (var berg in bergDB)
+            {
+                bergList.Add(new BergViewModel()
+                {
+                    Name = berg.Name,
+                    Gebirge = berg.Gebirge.Name,
+                    Schwierigkeit = berg.Schwierigkeit.Name
+                });
+            }
+
+            return View(bergList);
+        }
+
+        [HttpGet]
+        public IActionResult AddBerg()
+        {
+            var GebirgeListeDB = unitOfWork.Gebirge.GetAll();
+            var SchwierigkeitListeDB = unitOfWork.Schwierigkeit.GetAll();
+            List<SelectListItem> GebirgeListe = new List<SelectListItem>();
+            List<SelectListItem> SchwierigkeitListe = new List<SelectListItem>();
+            
+            foreach(var Gebirge in GebirgeListeDB)
+            {
+                GebirgeListe.Add(new SelectListItem() { Text = Gebirge.Name, Value = Gebirge.Id.ToString() });
+            }
+
+            foreach(var Schwierigkeit in SchwierigkeitListeDB)
+            {
+                SchwierigkeitListe.Add(new SelectListItem() { Text = Schwierigkeit.Name, Value = Schwierigkeit.Id.ToString() });
+            }
+
+            return View(new BergViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult AddBerg(BergViewModel berg)
+        {
+            var bergDB = new Berg()
+            {
+                Name = berg.Name,
+                GebirgeId = long.Parse(berg.Gebirge),
+                SchwierigkeitId = long.Parse(berg.Schwierigkeit)
+            };
+
+            unitOfWork.Berg.Add(bergDB);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Berg");
+        }
+
+        public IActionResult DeleteBerg(int berg)
+        {
+            var bergDB = unitOfWork.Berg.GetById(berg);
+
+            unitOfWork.Berg.Remove(bergDB);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Berg");
+        }
+
+        public IActionResult Gebirge()
+        {
+            List<GebirgeViewModel> gebirgeList = new List<GebirgeViewModel>();
+
+            var gebirgeDB = unitOfWork.Gebirge.GetAll();
+
+            foreach(var gebirge in gebirgeDB)
+            {
+                gebirgeList.Add(new GebirgeViewModel() { Name = gebirge.Name });
+            }
+
+            return View(gebirgeList);
+        }
+
+        [HttpGet]
+        public IActionResult AddGebirge()
+        {
+            return View(new GebirgeViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult AddGebirge(GebirgeViewModel gebirge)
+        {
+            Gebirge gebirgeDB = new Gebirge() { Name = gebirge.Name };
+
+            unitOfWork.Gebirge.Add(gebirgeDB);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Gebirge");
+        }
+
+        public IActionResult DeleteGebirge(int gebirge)
+        {
+            var gebirgeDB = unitOfWork.Gebirge.GetById(gebirge);
+
+            unitOfWork.Gebirge.Remove(gebirgeDB);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Gebirge");
+        }
+
+        public IActionResult Schwierigkeit()
+        {
+            List<SchwierigkeitViewModel> schwierigkeitList = new List<SchwierigkeitViewModel>();
+
+            var SchwierigkeitDB = unitOfWork.Schwierigkeit.GetAll();
+
+            foreach(var schwierigkeit in SchwierigkeitDB)
+            {
+                schwierigkeitList.Add(new SchwierigkeitViewModel() { Id = schwierigkeit.Id, Name = schwierigkeit.Name });
+            }
+
+            return View(schwierigkeitList);
+        }
+
+        [HttpGet]
+        public IActionResult AddSchwierigkeit()
+        {
+            return View(new SchwierigkeitViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult AddSchwierigkeit(SchwierigkeitViewModel schwierigkeit)
+        {
+            Schwierigkeit schwierigkeitDB = new Schwierigkeit()
+            {
+                Name = schwierigkeit.Name
+            };
+
+            unitOfWork.Schwierigkeit.Add(schwierigkeitDB);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Schwierigkeit");
+        }
+
+        public IActionResult DeleteSchwierigkeit(long schwierigkeit)
+        {
+            var schwierigkeitDB = unitOfWork.Schwierigkeit.GetById(schwierigkeit);
+
+            unitOfWork.Schwierigkeit.Remove(schwierigkeitDB);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Schwierigkeit");
+        }
+
+        public IActionResult Trick()
+        {
+            List<TrickViewModel> TrickList = new List<TrickViewModel>();
+
+            var TrickDB = unitOfWork.Trick.GetAll();
+
+            foreach (var trick in TrickDB)
+            {
+                TrickList.Add(new TrickViewModel() { Id = trick.Id, Name = trick.Name, Beschreibung =  trick.Beschreibung});
+            }
+
+            return View(TrickList);
+        }
+
+        [HttpGet]
+        public IActionResult AddTrick()
+        {
+            return View(new TrickViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult AddTrick(TrickViewModel trick)
+        {
+            Trick trickDB = new Trick()
+            {
+                Name = trick.Name,
+                Beschreibung = trick.Beschreibung
+            };
+
+            unitOfWork.Trick.Add(trickDB);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Trick");
+        }
+
+        public IActionResult DeleteTrick(long trick)
+        {
+            var trickDB = unitOfWork.Trick.GetById(trick);
+
+            unitOfWork.Trick.Remove(trickDB);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Trick");
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿namespace Avalanche.Models
 {
-    public class SponsorViewModel
+    public class GebirgeViewModel
     {
-        public long Id { get; set; }
         public string Name { get; set; }
     }
 }

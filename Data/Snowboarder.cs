@@ -12,14 +12,13 @@ namespace Avalanche.Data
         }
 
         public string Mitgliedsnummer { get; set; } = null!;
-        public string? Vorname { get; set; }
-        public string? Nachname { get; set; }
-        public string? Kuenstlername { get; set; }
-        public DateTime? Geburtstag { get; set; }
-        public string? HausBerg { get; set; }
+        public string Nachname { get; set; } = null!;
+        public string Vorname { get; set; } = null!;
+        public string Kuenstlername { get; set; } = null!;
+        public DateTime? Geburtstag { get; set; } = null!;
+        public long? HausBergId { get; set; }
 
-        public virtual Berg? HausBergNavigation { get; set; }
-        public virtual Profi? MitgliedsnummerNavigation { get; set; }
+        public virtual Berg? HausBerg { get; set; }
         public virtual Profi? Profi { get; set; }
         public virtual ICollection<Sponsoring> Sponsorings { get; set; }
 

@@ -10,6 +10,7 @@ namespace Avalanche.Data
             Bergs = new HashSet<Berg>();
         }
 
+        public long Id { get; set; }
         public string Name { get; set; } = null!;
 
         public virtual ICollection<Berg> Bergs { get; set; }

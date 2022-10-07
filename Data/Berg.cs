@@ -11,12 +11,13 @@ namespace Avalanche.Data
             Wettkampfs = new HashSet<Wettkampf>();
         }
 
+        public long Id { get; set; }
         public string Name { get; set; } = null!;
-        public string? Gebirge { get; set; }
-        public string? Schwierigkeit { get; set; }
+        public long GebirgeId { get; set; }
+        public long? SchwierigkeitId { get; set; }
 
-        public virtual Gebirge? GebirgeNavigation { get; set; }
-        public virtual Schwierigkeit? SchwierigkeitNavigation { get; set; }
+        public virtual Gebirge Gebirge { get; set; } = null!;
+        public virtual Schwierigkeit? Schwierigkeit { get; set; }
         public virtual ICollection<Snowboarder> Snowboarders { get; set; }
         public virtual ICollection<Wettkampf> Wettkampfs { get; set; }
     }

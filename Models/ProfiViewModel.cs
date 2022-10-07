@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Avalanche.Models
 {
@@ -12,5 +13,7 @@ namespace Avalanche.Models
         public string Mitgliedsnummer { get; set; }
         [Display(Name = "Best Trick")]
         public string BestTrick { get; set; }
+
+        public List<SelectListItem> TrickList { get; set; }
     }
 }
