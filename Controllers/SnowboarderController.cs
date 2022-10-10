@@ -9,7 +9,7 @@ namespace Avalanche.Controllers
 {
     public class SnowboarderController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork(new snowboardingContext());
+        private readonly UnitOfWork unitOfWork = new UnitOfWork(new snowboardingContext());
 
         public IActionResult Index()
         {
@@ -35,16 +35,15 @@ namespace Avalanche.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            List<SelectListItem> BergList = new List<SelectListItem>();
+            var bergDB = unitOfWork.Berg.GetAll();
 
-            var bergDataList = unitOfWork.Berg.GetAll();
-
-            foreach (var item in bergDataList)
+            var snowboarder = new SnowboarderViewModel
             {
-                BergList.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
+                BergList = bergDB.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString()}),
+                Geburtstag = DateTime.Now
+            };
 
-            return View(new SnowboarderViewModel() { BergList = BergList, Geburtstag= DateTime.Now });
+            return View(snowboarder);
         }
 
         [HttpPost]
@@ -133,15 +132,9 @@ namespace Avalanche.Controllers
         {
             SnowboarderViewModel snowboarder;
             Snowboarder snowboarderDB;
-            List<SelectListItem> BergList = new List<SelectListItem>();
             snowboarderDB = unitOfWork.Snowboarder.Find(x => x.Mitgliedsnummer.Equals(snowboarderID)).First();
 
-            var bergDataList = unitOfWork.Berg.GetAll();
-
-            foreach (var item in bergDataList)
-            {
-                BergList.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
-            }
+            var bergDB = unitOfWork.Berg.GetAll();
 
             snowboarder = new SnowboarderViewModel()
             {
@@ -151,7 +144,7 @@ namespace Avalanche.Controllers
                 Geburtstag = snowboarderDB.Geburtstag,
                 Mitgliedsnummer = snowboarderDB.Mitgliedsnummer,
                 HausBergId = snowboarderDB.HausBerg.Id.ToString(),
-                BergList = BergList
+                BergList = bergDB.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString()})
             };
 
             return View(snowboarder);
@@ -160,19 +153,15 @@ namespace Avalanche.Controllers
         [HttpPost]
         public IActionResult Update(SnowboarderViewModel snowboarder)
         {
-            Snowboarder snowboarderDB;
-            using (var Context = new snowboardingContext())
-            {
-                snowboarderDB = Context.Snowboarders.First(x => x.Mitgliedsnummer.Equals(snowboarder.Mitgliedsnummer));
+            Snowboarder snowboarderDB = unitOfWork.Snowboarder.Find(x => x.Mitgliedsnummer.Equals(snowboarder.Mitgliedsnummer)).First();
 
-                snowboarderDB.Nachname = snowboarder.Nachname;
-                snowboarderDB.Vorname = snowboarder.Vorname;
-                snowboarderDB.Kuenstlername = snowboarder.Kuenstlername;
-                snowboarderDB.Geburtstag = snowboarder.Geburtstag;
-                snowboarderDB.HausBergId = long.Parse(snowboarder.HausBergId);
+            snowboarderDB.Nachname = snowboarder.Nachname;
+            snowboarderDB.Vorname = snowboarder.Vorname;
+            snowboarderDB.Kuenstlername = snowboarder.Kuenstlername;
+            snowboarderDB.Geburtstag = snowboarder.Geburtstag;
+            snowboarderDB.HausBergId = long.Parse(snowboarder.HausBergId);
 
-                Context.SaveChanges();
-            }
+            unitOfWork.Complete();
 
             return RedirectToAction("Index");
         }
@@ -180,15 +169,15 @@ namespace Avalanche.Controllers
         [HttpGet]
         public IActionResult AddProfi(string snowboarderID)
         {
-            List<SelectListItem> TrickList = new List<SelectListItem>();
             var TrickListDB = unitOfWork.Trick.GetAll();
 
-            foreach(var trick in TrickListDB)
+            ProfiViewModel profi = new ProfiViewModel
             {
-                TrickList.Add(new SelectListItem() { Text = trick.Name, Value = trick.Id.ToString() });
-            }
+                Mitgliedsnummer = snowboarderID,
+                TrickList = TrickListDB.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
+            };
 
-            return View(new ProfiViewModel() { Mitgliedsnummer = snowboarderID, TrickList = TrickList});
+            return View(profi);
         }
 
         [HttpPost]
@@ -216,20 +205,13 @@ namespace Avalanche.Controllers
             var profiDB = unitOfWork.Profi.Find(x => x.Lizenznummer.Equals(profiID)).First();
             var trickDB = unitOfWork.Trick.GetAll();
 
-            List<SelectListItem> TrickList = new List<SelectListItem>();
-
-            foreach(var trick in trickDB)
-            {
-                TrickList.Add(new SelectListItem() { Text = trick.Name, Value = trick.Id.ToString() });
-            }
-
             profi = new ProfiViewModel()
             {
                 Lizenznummer = profiDB.Lizenznummer,
                 Weltcuppunkte = profiDB.Weltcuppunkte,
                 Mitgliedsnummer = profiDB.Mitgliedsnummer,
-                BestTrick = profiDB.BestTrick.ToString(),
-                TrickList = TrickList
+                BestTrick = profiDB.BestTrickId.ToString(),
+                TrickList = trickDB.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString()})
             };
 
             return View(profi);

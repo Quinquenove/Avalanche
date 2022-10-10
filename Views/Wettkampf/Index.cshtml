@@ -1,0 +1,45 @@
+﻿@model List<WettkampfViewModel>
+@{
+    ViewData["Title"] = "Wettkampf";
+}
+<a class="btn btn-primary" asp-controller="Wettkampf" asp-action="Add">Hinzufügen</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Jahr</th>
+            <th>Sponsor</th>
+            <th>Berg</th>
+            <th>Preisgeld</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Wettkampf in Model)
+        {
+            <tr>
+                <td>@Wettkampf.Name</td>
+                <td>@Wettkampf.Jahr</td>
+                <td>@Wettkampf.Sponsor</td>
+                <td>@Wettkampf.Berg</td>
+                <td>@Wettkampf.Preisgeld €</td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                        <a asp-controller="Wettkampf" asp-action="Detail" asp-route-wettkampf=@Wettkampf.Id class="btn btn-primary">
+                            <i class="bi bi-list-ul"></i>
+                            Details
+                        </a>
+                        <a asp-controller="Wettkampf" asp-action="Update" asp-route-wettkampf=@Wettkampf.Id class="btn btn-primary">
+                            <i class="bi bi-pencil-square"></i>
+                            Bearbeiten
+                        </a>
+                        <a asp-controller="Wettkampf" asp-action="Delete" asp-route-wettkampf=@Wettkampf.Id class="btn btn-danger">
+                            <i class="bi bi-trash-fill"></i>
+                            Löschen
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

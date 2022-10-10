@@ -13,7 +13,7 @@ namespace Avalanche.Repositories
         public Repository<Trick> Trick { get; }
         public Repository<Sponsor> Sponsor { get; }
         public Repository<Sponsoring> Sponsoring { get; }
-        public Repository<Wettkampf> Wettkampf { get; }
+        public WettkampfRepository Wettkampf { get; }
         public Repository<Vertragsart> Vertragsart { get; }
 
         public UnitOfWork(snowboardingContext context)
@@ -26,7 +26,7 @@ namespace Avalanche.Repositories
             Profi = new Repository<Profi>(_context);
             Trick = new Repository<Trick>(_context);
             Sponsor = new Repository<Sponsor>(_context);
-            Wettkampf = new Repository<Wettkampf>(_context);
+            Wettkampf = new WettkampfRepository(_context);
             Sponsoring = new Repository<Sponsoring>(_context);
             Vertragsart = new Repository<Vertragsart>(_context);
         }

@@ -8,7 +8,7 @@ namespace Avalanche.Controllers
 {
     public class MiscController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork(new snowboardingContext());
+        private readonly UnitOfWork unitOfWork = new UnitOfWork(new snowboardingContext());
 
         public IActionResult Index()
         {
@@ -62,28 +62,14 @@ namespace Avalanche.Controllers
         [HttpGet]
         public IActionResult AddSponsoring(string snowboarderID)
         {
-            SponsoringViewModel sponsoring;
-            List<SelectListItem> sponsorList = new List<SelectListItem>();
-            List<SelectListItem> vertragsartList = new List<SelectListItem>();
-
             var sponsorDB = unitOfWork.Sponsor.GetAll();
             var vertragsartDB = unitOfWork.Vertragsart.GetAll();
 
-            foreach (var sponsor in sponsorDB)
-            {
-                sponsorList.Add(new SelectListItem() { Text = sponsor.Name, Value = sponsor.Id.ToString() });
-            }
-
-            foreach (var vertragsart in vertragsartDB)
-            {
-                vertragsartList.Add(new SelectListItem() { Text = vertragsart.Name, Value = vertragsart.Id.ToString() });
-            }
-
-            sponsoring = new SponsoringViewModel()
+            SponsoringViewModel sponsoring = new SponsoringViewModel()
             {
                 Mitgliedsnummer = snowboarderID,
-                SponsorList = sponsorList,
-                VertragsartList = vertragsartList
+                SponsorList = sponsorDB.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString()}),
+                VertragsartList = vertragsartDB.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString()})
             };
 
             return View(sponsoring);
@@ -131,18 +117,15 @@ namespace Avalanche.Controllers
         [HttpPost]
         public IActionResult AddVertragsart(VertragsartViewModel vertragsart)
         {
-            using (var Context = new snowboardingContext())
+            var vertragsartDB = new Vertragsart()
             {
-                var vertragsartDB = new Vertragsart()
-                {
-                    Name = vertragsart.Name
-                };
+                Name = vertragsart.Name
+            };
 
-                Context.Add(vertragsartDB);
-                Context.SaveChanges();
-            }
+            unitOfWork.Vertragsart.Add(vertragsartDB);
+            unitOfWork.Complete();
 
-                return RedirectToAction("Vertragsart");
+            return RedirectToAction("Vertragsart");
         }
 
         public IActionResult DeleteVertragsart(long vertragsart)
@@ -178,22 +161,16 @@ namespace Avalanche.Controllers
         [HttpGet]
         public IActionResult AddBerg()
         {
-            var GebirgeListeDB = unitOfWork.Gebirge.GetAll();
-            var SchwierigkeitListeDB = unitOfWork.Schwierigkeit.GetAll();
-            List<SelectListItem> GebirgeListe = new List<SelectListItem>();
-            List<SelectListItem> SchwierigkeitListe = new List<SelectListItem>();
-            
-            foreach(var Gebirge in GebirgeListeDB)
-            {
-                GebirgeListe.Add(new SelectListItem() { Text = Gebirge.Name, Value = Gebirge.Id.ToString() });
-            }
+            var GebirgeDB = unitOfWork.Gebirge.GetAll();
+            var SchwierigkeitDB = unitOfWork.Schwierigkeit.GetAll();
 
-            foreach(var Schwierigkeit in SchwierigkeitListeDB)
+            BergViewModel berg = new BergViewModel
             {
-                SchwierigkeitListe.Add(new SelectListItem() { Text = Schwierigkeit.Name, Value = Schwierigkeit.Id.ToString() });
-            }
+                GebirgeListe = GebirgeDB.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }),
+                SchwierigkeitListe = SchwierigkeitDB.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
+            };
 
-            return View(new BergViewModel() { GebirgeListe = GebirgeListe, SchwierigkeitListe = SchwierigkeitListe});
+            return View(berg);
         }
 
         [HttpPost]
@@ -247,7 +224,7 @@ namespace Avalanche.Controllers
             return RedirectToAction("Berg");
         }
 
-            public IActionResult DeleteBerg(long berg)
+        public IActionResult DeleteBerg(long berg)
         {
             var bergDB = unitOfWork.Berg.GetById(berg);
 

@@ -1,0 +1,31 @@
+﻿@model WettkampfViewModel
+@{
+    ViewData["Title"] = "Wettkampf";
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" >
+    </div>
+    <div class="mb-3">
+        <label asp-for="Jahr" class="form-label"></label>
+        <input asp-for="Jahr" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label asp-for="Sponsor" class="form-label"></label>
+        <select asp-for="Sponsor" asp-items="Model.SponsorList" class="form-select"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Berg" class="form-label"></label>
+        <select asp-for="Berg" asp-items="Model.BergList" class="form-select"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Preisgeld" class="form-label"></label>
+        <input asp-for="Preisgeld" class="form-control">
+    </div>
+    <div class="mb-3">
+        <input type="submit" value="Hinzufügen" class="btn btn-primary" asp-controller="Wettkampf" asp-action="Add" />
+        <a asp-controller="Wettkampf" asp-action="Index">Abbrechen</a>
+    </div>
+</form>

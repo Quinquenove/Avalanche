@@ -14,6 +14,6 @@ namespace Avalanche.Models
         [Display(Name = "Best Trick")]
         public string BestTrick { get; set; }
 
-        public List<SelectListItem> TrickList { get; set; }
+        public IEnumerable<SelectListItem> TrickList { get; set; }
     }
 }

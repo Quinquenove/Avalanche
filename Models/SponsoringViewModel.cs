@@ -12,7 +12,7 @@ namespace Avalanche.Models
         public string Sponsor { get; set; }
         [Display(Name = "Vertragsart")]
         public string Vertragsart { get; set; }
-        public List<SelectListItem> SponsorList { get; set; }
-        public List<SelectListItem> VertragsartList { get; set; }
+        public IEnumerable<SelectListItem> SponsorList { get; set; }
+        public IEnumerable<SelectListItem> VertragsartList { get; set; }
     }
 }

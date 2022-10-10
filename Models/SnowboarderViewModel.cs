@@ -18,6 +18,6 @@ namespace Avalanche.Models
         public string HausBergId { get; set; }
         [Display(Name = "Mitgliedsnummer")]
         public string Mitgliedsnummer { get; set; }
-        public List<SelectListItem> BergList { get; set; }
+        public IEnumerable<SelectListItem> BergList { get; set; }
     }
 }
