@@ -1,0 +1,132 @@
+﻿@model WettkampfDetailViewModel
+@{
+    ViewData["Title"] = "Wettkampf - Detail";
+}
+
+<div class="row p-2">
+    <div class="mt-3"><h5>Wettkampf-Daten</h5></div>
+    <hr />
+</div>
+<div class="row p-2">
+    <div class="col">
+        <div>Name:</div>
+    </div>
+    <div class="col">
+        <div>@Model.Wettkampf.Name</div>
+    </div>
+</div>
+<div class="row p-2">
+    <div class="col">
+        <div>Jahr:</div>
+    </div>
+    <div class="col">
+        <div>@Model.Wettkampf.Jahr</div>
+    </div>
+</div>
+<div class="row p-2">
+    <div class="col">
+        <div>Sponsor:</div>
+    </div>
+    <div class="col">
+        <div>@Model.Sponsor.Name</div>
+    </div>
+</div>
+<div class="row p-2">
+    <div class="col">
+        <div>Preisgeld:</div>
+    </div>
+    <div class="col">
+        <div>@Model.Wettkampf.Preisgeld</div>
+    </div>
+</div>
+<div class="row p-2">
+    <div class="col">
+        <a asp-controller="Wettkampf" asp-action="Update" asp-route-wettkampf="@Model.Wettkampf.Id" class="btn btn-sm btn-primary">
+            Bearbeiten
+        </a>
+    </div>
+    <div class="col">
+    </div>
+</div>
+<div class="row p-2">
+    <div class="mt-3"><h5>Berg-Daten</h5></div>
+    <hr />
+</div>
+<div class="row p-2">
+    <div class="col">
+        <div>Name:</div>
+    </div>
+    <div class="col">
+        <div>@Model.Berg.Name</div>
+    </div>
+</div>
+<div class="row p-2">
+    <div class="col">
+        <div>Gebirge:</div>
+    </div>
+    <div class="col">
+        <div>@Model.Berg.GebirgeId</div>
+    </div>
+</div>
+<div class="row p-2">
+    <div class="col">
+        <div>Schwierigkeit:</div>
+    </div>
+    <div class="col">
+        <div>@Model.Berg.SchwierigkeitId</div>
+    </div>
+</div>
+<div class="row">
+    <div class="mt-3"><h5>Wettkämpfer</h5></div>
+    <hr />
+</div>
+@if (Model.SnowboarderList.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mitgliedsnummer
+                </th>
+                <th>
+                    Nachname
+                </th>
+                <th>
+                    Künstlername
+                </th>
+                <th>
+                    Vorname
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var snowboarder in Model.SnowboarderList)
+            {
+                <tr>
+                    <td>@snowboarder.Mitgliedsnummer</td>
+                    <td>@snowboarder.Nachname</td>
+                    <td>@snowboarder.Kuenstlername</td>
+                    <td>@snowboarder.Vorname</td>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <a asp-controller="Snowboarder" asp-action="Detail" asp-route-snowboarderID=@snowboarder.Mitgliedsnummer class="btn btn-primary">
+                                <i class="bi bi-list-ul"></i>
+                                Details
+                            </a>
+                            <a asp-controller="Wettkampf" asp-action="DeleteWettkaempfer" asp-all-route-data=@(new Dictionary<string, string>{{"snowboarderID", snowboarder.Mitgliedsnummer}, {"wettkampf", Model.Wettkampf.Id.ToString() }}) class="btn btn-danger">
+                                <i class="bi bi-trash-fill"></i>
+                                Entfernen
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="mt-3"><p>Dieser Wettkampf hat noch keine Teilnehmer.</p></div>
+}
+<a asp-controller="Wettkampf" asp-action="AddWettkaempfer" asp-route-wettkampf=@Model.Wettkampf.Id class="btn btn-primary btn-sm">Hinzufügen</a>

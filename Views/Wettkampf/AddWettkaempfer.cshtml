@@ -1,0 +1,43 @@
+﻿@model WettkaempferViewModel
+@{
+    ViewData["Title"] = "Wettkämpfer";
+}
+
+<form method="post">
+    <table class="table">
+        <thead>
+            <th></th>
+            <th>Mitgliedsnummer</th>
+            <th>Nachname</th>
+            <th>Künstlername</th>
+            <th>Vorname</th>
+        </thead>
+        <tbody>
+
+        @foreach(var snowboarder in Model.SnowboarderList)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" name="SelectedSnowboarder" value=@snowboarder.Mitgliedsnummer />
+                </td>
+                <td>
+                    @snowboarder.Mitgliedsnummer
+                </td>
+                <td>
+                    @snowboarder.Nachname
+                </td>
+                <td>
+                    @snowboarder.Kuenstlername
+                </td>
+                <td>
+                    @snowboarder.Vorname
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <div class="mb-3">
+        <input type="submit" value="Hinzufügen" class="btn btn-primary" asp-controller="Wettkampf" asp-action="AddWettkaempfer" />
+        <a asp-controller="Wettkampf" asp-action="Index">Abbrechen</a>
+    </div>
+</form>

@@ -32,7 +32,7 @@ namespace Avalanche.Repositories
             return _entities.ToList();
         }
 
-        public T GetById(long id)
+        public virtual T GetById(long id)
         {
             return _entities.Find(id);
         }

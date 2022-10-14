@@ -14,7 +14,22 @@ namespace Avalanche.Repositories
             return base._entities.
                         Include(x => x.Sponsor)
                         .Include(x => x.Berg)
+                        .ThenInclude(x => x.Schwierigkeit)
+                        .Include(x => x.Berg)
+                        .ThenInclude(x => x.Gebirge)
                         .ToList();
+        }
+
+        public override Wettkampf GetById(long id)
+        {
+            return base._entities.
+                        Where(x => x.Id == id)
+                        .Include(x => x.Sponsor)
+                        .Include(x => x.Berg)
+                        .ThenInclude(x => x.Schwierigkeit)
+                        .Include(x => x.Berg)
+                        .ThenInclude(x => x.Gebirge)
+                        .First();
         }
     }
 }

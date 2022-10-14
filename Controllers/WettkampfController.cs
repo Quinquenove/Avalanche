@@ -112,5 +112,77 @@ namespace Avalanche.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult Detail(long wettkampf)
+        {
+            var wettkampfDB = unitOfWork.Wettkampf.GetById(wettkampf);
+
+            WettkampfViewModel wettkampfView = new WettkampfViewModel
+            {
+                Id = wettkampfDB.Id,
+                Name = wettkampfDB.Name,
+                Jahr = wettkampfDB.Jahr,
+                Preisgeld = wettkampfDB.Preisgeld
+            };
+
+            BergViewModel berg = new BergViewModel
+            {
+                Id = wettkampfDB.Berg.Id,
+                Name = wettkampfDB.Berg.Name,
+                GebirgeId = wettkampfDB.Berg.Gebirge.Name,
+                SchwierigkeitId = wettkampfDB.Berg.Schwierigkeit.Name
+            };
+
+            SponsorViewModel sponsor = new SponsorViewModel
+            {
+                Name = wettkampfDB.Sponsor.Name
+            };
+
+            var snowboarderListe = unitOfWork.Snowboarder.Find(x => x.Wettkampfs.Any(y => y.Id == wettkampf)).Select(x => new SnowboarderViewModel { 
+                Mitgliedsnummer = x.Mitgliedsnummer,
+                Nachname = x.Nachname,
+                Kuenstlername = x.Kuenstlername,
+                Vorname = x.Vorname,
+                Geburtstag = x.Geburtstag,
+                HausBergId = x.HausBergId.ToString()
+            });
+
+            WettkampfDetailViewModel wettkampfDetail = new WettkampfDetailViewModel
+            {
+                Wettkampf = wettkampfView,
+                Berg = berg,
+                Sponsor = sponsor,
+                SnowboarderList = snowboarderListe
+            };
+
+            return View(wettkampfDetail);
+        }
+
+        [HttpGet]
+        public IActionResult AddWettkaempfer(long wettkampf)
+        {
+            var snowboarderDB = unitOfWork.Snowboarder.GetAll();
+
+            WettkaempferViewModel wettkaempfer = new WettkaempferViewModel
+            {
+                WettkampfId = wettkampf,
+                SnowboarderList = snowboarderDB.Select(x => new SnowboarderViewModel
+                {
+                    Mitgliedsnummer = x.Mitgliedsnummer,
+                    Nachname = x.Nachname,
+                    Kuenstlername = x.Kuenstlername,
+                    Vorname = x.Vorname,
+                    Geburtstag = x.Geburtstag,
+                    HausBergId = x.HausBergId.ToString()
+                })
+            };
+            return View(wettkaempfer);
+        }
+
+        [HttpPost]
+        public IActionResult AddWettkaempfer(WettkaempferViewModel wettkaempfer)
+        {
+            return RedirectToAction("Detail", new {wettkampf = wettkaempfer.WettkampfId});
+        }
     }
 }
