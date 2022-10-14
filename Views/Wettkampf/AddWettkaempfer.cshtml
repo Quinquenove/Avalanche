@@ -4,6 +4,7 @@
 }
 
 <form method="post">
+    <input asp-for="WettkampfId" hidden />
     <table class="table">
         <thead>
             <th></th>
@@ -38,6 +39,6 @@
     </table>
     <div class="mb-3">
         <input type="submit" value="Hinzufügen" class="btn btn-primary" asp-controller="Wettkampf" asp-action="AddWettkaempfer" />
-        <a asp-controller="Wettkampf" asp-action="Index">Abbrechen</a>
+        <a asp-controller="Wettkampf" asp-action="Detail" asp-route-wettkampf=@Model.WettkampfId>Abbrechen</a>
     </div>
 </form>

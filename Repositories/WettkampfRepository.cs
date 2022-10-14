@@ -29,6 +29,7 @@ namespace Avalanche.Repositories
                         .ThenInclude(x => x.Schwierigkeit)
                         .Include(x => x.Berg)
                         .ThenInclude(x => x.Gebirge)
+                        .Include(x => x.Snowboarders)
                         .First();
         }
     }

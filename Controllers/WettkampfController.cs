@@ -182,7 +182,32 @@ namespace Avalanche.Controllers
         [HttpPost]
         public IActionResult AddWettkaempfer(WettkaempferViewModel wettkaempfer)
         {
+            var selectedSnowboarder = unitOfWork.Snowboarder.Find(x => wettkaempfer.SelectedSnowboarder.Contains(x.Mitgliedsnummer));
+            var wettkampfDB = unitOfWork.Wettkampf.GetById(wettkaempfer.WettkampfId);
+
+            foreach(var snowboarder in selectedSnowboarder)
+            {
+                wettkampfDB.Snowboarders.Add(snowboarder);
+            }
+
+            unitOfWork.Complete();
+
             return RedirectToAction("Detail", new {wettkampf = wettkaempfer.WettkampfId});
+        }
+
+        public IActionResult DeleteWettkaempfer(string snowboarderID, string wettkampf)
+        {
+            long wettkampfID = long.Parse(wettkampf);
+
+            var wettkampfDB = unitOfWork.Wettkampf.GetById(wettkampfID);
+
+            var snowboarderDB = unitOfWork.Snowboarder.Find(x => x.Mitgliedsnummer.Equals(snowboarderID)).First();
+
+            wettkampfDB.Snowboarders.Remove(snowboarderDB);
+
+            unitOfWork.Complete();
+
+            return RedirectToAction("Detail", new {wettkampf = wettkampfID});
         }
     }
 }
