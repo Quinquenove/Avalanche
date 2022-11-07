@@ -4,6 +4,11 @@ using System.Linq.Expressions;
 
 namespace Avalanche.Repositories
 {
+    /// <summary>
+    /// Basis Implementierung des Basis Repositories.
+    /// Definition Repository-Pattern: https://de.wikipedia.org/wiki/Repository_(Entwurfsmuster)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly DbSet<T> _entities;

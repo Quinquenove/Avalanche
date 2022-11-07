@@ -4,6 +4,10 @@ using System.Linq.Expressions;
 
 namespace Avalanche.Repositories
 {
+    /// <summary>
+    /// Speziefisches Repository für die Snowboarder Tabelle.
+    /// Überschreibt Methoden der Basis Klasse um Beziehungen zu anderen Tabellen zu berücksichtigen.
+    /// </summary>
     public class SnowboarderRepository : Repository<Snowboarder>, IRepository<Snowboarder>
     {
         public SnowboarderRepository(DbContext Context) : base(Context)

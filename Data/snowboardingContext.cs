@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Avalanche.Data
 {
+    /// <summary>
+    /// Basis Klasse für den DBContext. Definiert Beziehungen zwischen den Datenmodellen der Datenbank.
+    /// Wird benötigt um CRUD Operationen über Entity Framework auszuführen.
+    /// </summary>
     public partial class snowboardingContext : DbContext
     {
         public snowboardingContext()

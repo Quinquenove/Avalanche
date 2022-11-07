@@ -8,6 +8,10 @@ namespace Avalanche.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+        /// <summary>
+        /// Controller für die Start Seite der Anwendung und die Error Seite
+        /// </summary>
+        /// <param name="logger"></param>
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;

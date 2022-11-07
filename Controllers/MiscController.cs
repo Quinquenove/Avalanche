@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Avalanche.Controllers
 {
+    /// <summary>
+    /// Controller für alle Seiten der Misc-Kategorie.
+    /// Die Misc-Kategorie beinhaltet CRUD Operationen für alle Tabellen außer Snowboarder, Profi, Wettkampf und Wettkaempfer.
+    /// </summary>
     public class MiscController : Controller
     {
         private readonly UnitOfWork unitOfWork = new UnitOfWork(new snowboardingContext());

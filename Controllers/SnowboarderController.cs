@@ -7,6 +7,10 @@ using Avalanche.Repositories;
 
 namespace Avalanche.Controllers
 {
+    /// <summary>
+    /// Controller für alle Seiten der Kategorie Snowboarder.
+    /// Beinhaltet CRUD Operationen für die Tabellen Snowboarder und Profi.
+    /// </summary>
     public class SnowboarderController : Controller
     {
         private readonly UnitOfWork unitOfWork = new UnitOfWork(new snowboardingContext());

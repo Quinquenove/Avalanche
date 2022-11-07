@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Avalanche.Controllers
 {
+    /// <summary>
+    /// Controller für alle Seiten der Wettkampf Kategorie.
+    /// Beinhaltet CRUD Funktionen für die Tabellen Wettkampf und Wettkaempfer.
+    /// </summary>
     public class WettkampfController : Controller
     {
         private readonly UnitOfWork unitOfWork = new UnitOfWork(new snowboardingContext());

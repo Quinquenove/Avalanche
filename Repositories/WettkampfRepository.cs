@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Avalanche.Repositories
 {
+    /// <summary>
+    /// Speziefisches Repository für die Wettkampf Tabelle.
+    /// Überschreibt Methoden der Basis Klasse um Beziehungen zu anderen Tabellen zu berücksichtigen.
+    /// </summary>
     public class WettkampfRepository : Repository<Wettkampf>
     {
         public WettkampfRepository(DbContext Context) : base(Context)

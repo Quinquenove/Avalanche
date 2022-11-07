@@ -2,6 +2,10 @@
 
 namespace Avalanche.Repositories
 {
+    /// <summary>
+    /// Implementierung des UnitOfWork-Patterns.
+    /// Definition: https://de.wikipedia.org/wiki/Unit_of_Work
+    /// </summary>
     public class UnitOfWork : IDisposable
     {
         private readonly snowboardingContext _context;
