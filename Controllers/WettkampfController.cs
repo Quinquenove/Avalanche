@@ -165,7 +165,8 @@ namespace Avalanche.Controllers
         [HttpGet]
         public IActionResult AddWettkaempfer(long wettkampf)
         {
-            var snowboarderDB = unitOfWork.Snowboarder.GetAll();
+            var wettkampfDB =  unitOfWork.Wettkampf.GetById(wettkampf);
+            var snowboarderDB = unitOfWork.Snowboarder.GetAll().Where(x => !x.Wettkampfs.Contains(wettkampfDB)).ToList();
 
             WettkaempferViewModel wettkaempfer = new WettkaempferViewModel
             {
